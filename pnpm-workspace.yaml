@@ -1,0 +1,20 @@
+packages:
+  - "apps/*"
+  - "packages/*"
+allowBuilds:
+  # unrs-resolver（eslint-import-resolver-typescript 的原生依赖）的 postinstall 只是
+  # napi-postinstall 的兜底检查。本机所需的 @unrs/resolver-binding-darwin-arm64 已随
+  # optionalDependencies 正常安装，原生 .node 文件就位，因此无需执行该脚本。
+  unrs-resolver: false
+minimumReleaseAgeExclude:
+  - "@typescript-eslint/eslint-plugin@8.70.1"
+  - "@typescript-eslint/parser@8.70.1"
+  - "@typescript-eslint/project-service@8.70.1"
+  - "@typescript-eslint/scope-manager@8.70.1"
+  - "@typescript-eslint/tsconfig-utils@8.70.1"
+  - "@typescript-eslint/type-utils@8.70.1"
+  - "@typescript-eslint/types@8.70.1"
+  - "@typescript-eslint/typescript-estree@8.70.1"
+  - "@typescript-eslint/utils@8.70.1"
+  - "@typescript-eslint/visitor-keys@8.70.1"
+  - typescript-eslint@8.70.1
