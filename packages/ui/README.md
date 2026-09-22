@@ -6,12 +6,12 @@ The shared UI layer for this monorepo. It wraps [Ant Design](https://ant.design)
 
 ## What's in here
 
-| Export                                                                                                | Kind                  | Notes                                                    |
-| ----------------------------------------------------------------------------------------------------- | --------------------- | -------------------------------------------------------- |
-| `UiProvider`                                                                                          | own                   | Theme + locale + antd `App` context. Mount once per app. |
-| `theme`                                                                                               | own                   | The single `ThemeConfig` for the whole repo.             |
-| `Button`, `ButtonProps`                                                                               | own wrapper           | Thin passthrough over antd's `Button`.                   |
-| `Alert`, `App`, `Card`, `Flex`, `Input`, `Modal`, `Select`, `Space`, `Table`, `Tooltip`, `Typography` | re-exported from antd | Curated. Add more as they're needed.                     |
+| Export                                                                                                                                                                                            | Kind                  | Notes                                                    |
+| ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------------------- | -------------------------------------------------------- |
+| `UiProvider`                                                                                                                                                                                      | own                   | Theme + locale + antd `App` context. Mount once per app. |
+| `theme`                                                                                                                                                                                           | own                   | The single `ThemeConfig` for the whole repo.             |
+| `Button`, `ButtonProps`                                                                                                                                                                           | own wrapper           | Thin passthrough over antd's `Button`.                   |
+| `Alert`, `App`, `Avatar`, `Card`, `Checkbox`, `Divider`, `Dropdown`, `Empty`, `Flex`, `Input`, `Layout`, `Menu`, `Modal`, `Segmented`, `Select`, `Space`, `Table`, `Tag`, `Tooltip`, `Typography` | re-exported from antd | Curated. Add more as they're needed.                     |
 
 Everything is reachable from one entry point, so a future theme change or library swap touches this package only.
 
