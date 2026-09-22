@@ -89,6 +89,33 @@ export const baseConfig = [
           "newlines-between": "always",
         },
       ],
+
+      // 架构边界的主力规则：不许 import 一个没在最近 package.json 里声明的包。
+      //
+      // 它一条就覆盖了多条架构约定，因为判定依据是「有没有声明」而不是包名：
+      //   - 应用不得直接依赖 antd（antd 只在 packages/ui 的 dependencies 里）
+      //   - packages/ui 不得引入 @ant-design/nextjs-registry（不在它的依赖里）
+      //   - 应用不得自己写 ConfigProvider theme（ConfigProvider 没从 barrel 导出，
+      //     只能从 antd 拿，于是被上面那条顺带拦下）
+      //   - x-typings 不得引入 react（不在它的依赖里）
+      //
+      // 为什么这条规则在本仓库格外可靠：读 eslint-plugin-import 源码可知，未传
+      // packageDir 时它走 pkgUp({ cwd: getPhysicalFilename(context) })，即
+      // **从被检查文件的位置向上找 package.json，不用 process.cwd()**。
+      // 本仓库其他所有 lint 机制都被 cwd 陷阱困扰（flat config 从 cwd 向上找配置、
+      // @next/next 找不到 pages、projectService 同时看到多个 tsconfig），唯独这条免疫——
+      // 从仓库根跑、在 IDE 里跑，结果都正确。
+      //
+      // 选项取宽松档（devDependencies / peerDependencies 视为已声明），只拦「哪都没声明」。
+      // 想更严可以把它们改成文件模式数组，只允许 *.config.* 之类的文件导入 devDependencies。
+      "import/no-extraneous-dependencies": [
+        "error",
+        { devDependencies: true, peerDependencies: true },
+      ],
+
+      // 拦「用相对路径跨包 import」，例如 ../../packages/ui/src/button。
+      // 正确写法是用包名 @repo/ui。turbo boundaries 也查这一项，这条让本地立刻看到反馈。
+      "import/no-relative-packages": "error",
     },
   },
 

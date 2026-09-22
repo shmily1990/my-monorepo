@@ -6,12 +6,12 @@ The shared UI layer for this monorepo. It wraps [Ant Design](https://ant.design)
 
 ## What's in here
 
-| Export                                                                                        | Kind                  | Notes                                                    |
-| --------------------------------------------------------------------------------------------- | --------------------- | -------------------------------------------------------- |
-| `UiProvider`                                                                                  | own                   | Theme + locale + antd `App` context. Mount once per app. |
-| `theme`                                                                                       | own                   | The single `ThemeConfig` for the whole repo.             |
-| `Button`, `ButtonProps`                                                                       | own wrapper           | Thin passthrough over antd's `Button`.                   |
-| `Alert`, `App`, `Flex`, `Input`, `Modal`, `Select`, `Space`, `Table`, `Tooltip`, `Typography` | re-exported from antd | Curated. Add more as they're needed.                     |
+| Export                                                                                                | Kind                  | Notes                                                    |
+| ----------------------------------------------------------------------------------------------------- | --------------------- | -------------------------------------------------------- |
+| `UiProvider`                                                                                          | own                   | Theme + locale + antd `App` context. Mount once per app. |
+| `theme`                                                                                               | own                   | The single `ThemeConfig` for the whole repo.             |
+| `Button`, `ButtonProps`                                                                               | own wrapper           | Thin passthrough over antd's `Button`.                   |
+| `Alert`, `App`, `Card`, `Flex`, `Input`, `Modal`, `Select`, `Space`, `Table`, `Tooltip`, `Typography` | re-exported from antd | Curated. Add more as they're needed.                     |
 
 Everything is reachable from one entry point, so a future theme change or library swap touches this package only.
 
@@ -49,10 +49,6 @@ message.success("done");
 `import { message } from "antd"` uses antd's static methods, which live outside the React tree: they cannot see `ConfigProvider`'s theme, and React 19 warns about them. `UiProvider` mounts the `App` component precisely so `App.useApp()` works.
 
 Components that use any of these must be client components — add `"use client"` at the top of the file.
-
-## Why `Card` is not exported
-
-The template's `src/card.tsx` exports a `Card` that is an `<a>` element stub — unrelated to antd's `Card`. Re-exporting antd's `Card` from the barrel would put two different components under one name depending on your import path. `src/card.tsx` and `src/code.tsx` have no consumers; deleting them lets antd's `Card` be added.
 
 ## Source, not built
 
