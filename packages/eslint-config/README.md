@@ -16,10 +16,10 @@ Three entry points, one per kind of workspace. Each is a flat config array — d
 
 ## Who uses what
 
-| Workspace     | Entry                               |
-| ------------- | ----------------------------------- |
-| `apps/web`    | `@repo/eslint-config/next-js`       |
-| `packages/ui` | `@repo/eslint-config/react-library` |
+| Workspace             | Entry                               |
+| --------------------- | ----------------------------------- |
+| `apps/openrouter-web` | `@repo/eslint-config/next-js`       |
+| `packages/ui`         | `@repo/eslint-config/react-library` |
 
 ## Usage
 

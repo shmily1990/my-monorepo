@@ -21,7 +21,7 @@ nvm use            # 切到 .nvmrc 指定的 Node
 node -v            # 确认输出 v24.x
 corepack enable    # 每个 Node 大版本执行一次
 pnpm install
-pnpm dev           # http://localhost:3000
+pnpm dev           # http://localhost:3002
 ```
 
 `corepack enable` 只需在每个 Node 大版本下执行一次——它写入的 shim 是按 Node 版本存放的。将来升级 Node 后要重新执行。
@@ -31,7 +31,7 @@ pnpm dev           # http://localhost:3000
 全部在**仓库根目录**执行：
 
 ```sh
-pnpm dev           # 启动所有应用（web 在 :3000）
+pnpm dev           # 启动 openrouter-web（:3002）
 pnpm build
 pnpm lint          # 检查所有 workspace
 pnpm check-types
@@ -43,7 +43,7 @@ pnpm format:check  # 只检查，不改
 
 提交时 husky 会自动对暂存文件跑 lint 与格式化。**不要用 `git commit --no-verify` 跳过它**——那是给紧急情况准备的逃生口，而 CI 目前还不存在，跳过就没有第二道防线了。
 
-## 四个坑
+## 五个坑
 
 ### 坑 1：`node -v` 不是 24，但 `nvm use` 看起来成功了
 
@@ -58,7 +58,7 @@ pnpm format:check  # 只检查，不改
 **症状**：两种，都很迷惑人。
 
 ```
-$ npx eslint apps/web/app/page.tsx
+$ npx eslint apps/openrouter-web/features/home/index.tsx
 ESLint couldn't find an eslint.config.(js|mjs|cjs) file.
 ```
 
@@ -88,6 +88,35 @@ Multiple projects found, consider using a single `tsconfig` with `references`...
 **原因**：两者都是生成物。`pnpm-lock.yaml` 由 `pnpm install` 维护，`next-env.d.ts` 由 Next 生成，`.husky/_/` 由 husky 生成。
 
 **解法**：不要手改。锁文件冲突的正确处理是接受一侧后重跑 `pnpm install`。这些文件已在 `.gitignore`／`.prettierignore` 中被相应处理。
+
+### 坑 5：编辑器报错，但命令行是干净的
+
+这个坑和前四个不同——**不是配置错了，是编辑器的缓存旧了**。所以单列在这里，因为排查顺序完全不一样。
+
+**症状**：编辑器里一片红波浪线，比如说
+
+```
+找不到文件 "@repo/typescript-config/nextjs.json"
+无法使用 JSX，除非提供了 "--jsx" 标志
+```
+
+但 `pnpm check-types` 是绿的。
+
+**原因**：编辑器的 TypeScript 服务把模块解析结果缓存了。以下操作会让缓存失效，但它不一定会自己发现：
+
+- `node_modules` 被删除重建
+- 新增/删除 workspace 包（依赖布局变了）
+- 改了某个 `tsconfig.json` 的 `extends`
+
+第二条尤其典型：一个本来是独立工程的目录被接进 workspace 后，它在**接进来之前**解析不到 `@repo/...`，那个失败被缓存下来了；接进来之后符号链接有了，但缓存还在。
+
+**解法**：
+
+1. **先信命令行**。跑 `pnpm check-types`——绿的就说明代码没有问题，问题在编辑器。
+2. **重启 TS 服务**：`Cmd+Shift+P` → `TypeScript: Restart TS Server`，或直接重载窗口。
+3. **不要为了让报错消失去改 `tsconfig.json` 或源码**。那样做的结果通常是：编辑器满意了，命令行却真的坏了。
+
+编辑器使用的 TypeScript 版本由 [`.vscode/settings.json`](../.vscode/settings.json) 的 `typescript.tsdk` 指向仓库锁定的那一份——如果编辑器右下角显示的不是工作区版本，点它切换一次。
 
 ## 怎么跟 AI 提需求
 
@@ -138,7 +167,7 @@ skill 为什么不是必然自动？因为它是**模型决策，不是字符串
 
 ### 提示词里真正值得写的是这三类
 
-1. **任务边界** —— 「只改 `packages/ui`，不要动 `apps/web`」
+1. **任务边界** —— 「只改 `packages/ui`，不要动 `apps/openrouter-web`」
 2. **你担心的那条规则** —— 「注意应用不能直接 import antd」
 3. **验收要求** —— 「改完跑 `pnpm lint` 和 `pnpm check-types`」
 
@@ -156,7 +185,12 @@ skill 为什么不是必然自动？因为它是**模型决策，不是字符串
 ## 目录速查
 
 ```
-apps/web/                 唯一应用（Next.js）
+apps/openrouter-web/      唯一的应用（Next.js，:3002）
+  app/(marketing)/        路由组：首页与 /models；路由文件只 return 一个 feature 组件
+  features/<page>/        每页一个目录：index.tsx + index.module.scss + components/
+  components/             跨页共用的壳：layout/、brand/、icons/
+  styles/tokens.scss      设计令牌（:root 自定义属性），由 app/layout.tsx 引入一次
+  lib/                    非组件逻辑：provider 注册表、导航数据、格式化函数
 packages/ui/              UI 层，封装 antd —— 子应用从这里取组件
 packages/x-typings/       共享类型，Zod schema 为唯一来源
 packages/eslint-config/   ESLint 配置，三个入口：base / react-library / next-js

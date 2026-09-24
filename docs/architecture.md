@@ -7,15 +7,14 @@ Why this monorepo is shaped the way it is. What each package _is_ and _how to us
 ## 依赖方向
 
 ```
-                  ┌───────────────┐
-                  │   apps/web    │  Next.js 16 · React 19
-                  └───────┬───────┘
-               ┌──────────┴──────────┐
-               ▼                     ▼
-      ┌────────────────┐    ┌──────────────────┐
-      │  @repo/ui      │    │ @repo/x-typings  │
-      │  antd 封装层    │    │ zod schema 与类型 │
-      └────────────────┘    └──────────────────┘
+            apps/openrouter-web            Next.js 16 · React 19
+                    │
+        ┌───────────┴───────────┐
+        ▼                       ▼
+   ┌────────────────┐    ┌──────────────────┐
+   │  @repo/ui      │    │ @repo/x-typings  │
+   │  antd 封装层    │    │ zod schema 与类型 │
+   └────────────────┘    └──────────────────┘
 
   以下两个包被所有包以 devDependencies 引用，不参与运行时：
       @repo/eslint-config      @repo/typescript-config
@@ -27,9 +26,9 @@ Why this monorepo is shaped the way it is. What each package _is_ and _how to us
 
 ## 每个包为什么存在
 
-**`apps/web`** —— 唯一的应用。它是**消费者**：所有可复用的东西都应该下沉到 `packages/`，应用本身只留路由、页面与业务编排。
+**`apps/openrouter-web`** —— 唯一的应用。它是**消费者**：所有可复用的东西都应该下沉到 `packages/`，应用本身只留路由、页面与业务编排。
 
-**`packages/ui`** —— 存在的理由是**让应用不依赖 antd**。如果应用直接 `import { Button } from "antd"`，那么：换 UI 库要改每一个应用；主题会散落在各处；antd 版本可能出现多份。把这层封装收在一个包里，主题、locale、antd 版本就只有一处可改。
+**`packages/ui`** —— 存在的理由是**让应用不依赖 antd**。如果应用直接 `import { Button } from "antd"`，那么：换 UI 库要改所有用到的地方；主题会散落在各处；antd 版本可能出现多份。把这层封装收在一个包里，主题、locale、antd 版本就只有一处可改——而且将来加第二个应用时，它天然继承同一套主题与版本约束。
 
 它的公开面刻意是**策展式**的——`src/index.ts` 逐个具名再导出（`export { Button, Card, ... } from "antd"`），而不是 `export * from "antd"`。这样「我们对外承诺了什么」是一份可读的清单，而不是 antd 的全部 API。
 
@@ -47,17 +46,17 @@ Why this monorepo is shaped the way it is. What each package _is_ and _how to us
 - **不需要维护任务依赖顺序**。没有 build，就没有「A 必须先于 B 构建」的图要维护。
 - **编辑器跳转直达源码**，而不是 `.d.ts`。
 
-Turbo 的 `build` 任务因此只对 `apps/web` 执行——这不是配置遗漏，是设计结果。
+Turbo 的 `build` 任务因此只对 `apps/openrouter-web` 执行——这不是配置遗漏，是设计结果。
 
 ## 为什么 ESLint 分三个入口
 
 `@repo/eslint-config` 导出 `base` / `react-library` / `next-js` 三个入口，而不是一份配置加 `files` 匹配：
 
-| 入口            | 用于                         | 含                                          |
-| --------------- | ---------------------------- | ------------------------------------------- |
-| `base`          | 非 React 的包（`x-typings`） | JS/TS 规则、import 校验、Turbo 环境变量校验 |
-| `react-library` | React 组件库（`ui`）         | `base` + React + React Hooks                |
-| `next-js`       | Next.js 应用（`web`）        | `react-library` + Next 规则                 |
+| 入口            | 用于                             | 含                                          |
+| --------------- | -------------------------------- | ------------------------------------------- |
+| `base`          | 非 React 的包（`x-typings`）     | JS/TS 规则、import 校验、Turbo 环境变量校验 |
+| `react-library` | React 组件库（`ui`）             | `base` + React + React Hooks                |
+| `next-js`       | Next.js 应用（`openrouter-web`） | `react-library` + Next 规则                 |
 
 **为什么用入口分发而不是 `files` 匹配**：入口分发**失败是响亮的**——`packages/ui` 用 `react-library`，它就不可能拿到 Next 规则，因为那些规则根本不在它引入的模块里。而 `files` 匹配是**静默失败**的：一条 glob 写错，规则就悄悄不生效了，没人会发现。
 

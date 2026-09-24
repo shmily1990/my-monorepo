@@ -54,7 +54,7 @@ When you only need the type, use `import type { Order }` — that form is erased
 
 It extends `@repo/typescript-config/base.json` but overrides `module` and `moduleResolution` to `ESNext` / `Bundler`. `base.json` uses `NodeNext`, which demands an explicit `.js` extension on every relative import — `export * from "./user.js"`. That is right for Node-side code and wrong here: these files are consumed by a bundler, which wants extensionless specifiers. Without the override `src/index.ts` fails to compile with `TS2835`.
 
-The override also means this package sits slightly outside the "all tsconfig lives in `@repo/typescript-config`" convention stated at the top of this repo's config packages. The cleaner fix is a `bundler.json` in `typescript-config` that `nextjs.json`, `react-library.json` and this package all extend — that would remove the override.
+The override also means this package sits slightly outside the "all tsconfig lives in `@repo/typescript-config`" convention stated at the top of this repo's config packages. **The fix would be a `bundler.json` in that package** doing exactly what this override does, so this package could extend it instead. Until one exists, the local override stays.
 
 > [!NOTE]
 > **`packages/ui` inherits the same `NodeNext` settings and does _not_ hit `TS2835`.** The deciding factor is the `type` field, not the presence of relative imports: this package declares `"type": "module"`, so its files are ESM and `NodeNext` demands explicit extensions. `packages/ui` has no `type` field, so Node treats it as CommonJS and `NodeNext` permits extensionless relative imports — verified, its `src/index.ts` uses `export { ... } from "./button"` and type-checks clean.

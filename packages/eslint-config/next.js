@@ -4,7 +4,7 @@ import { baseConfig } from "./base.js";
 import { reactConfig } from "./react.js";
 
 /**
- * Next.js 应用配置，适用于 apps/web。
+ * Next.js 应用配置，适用于 apps/openrouter-web。
  *
  * Next 规则只在这里出现，因此只有引入本入口的应用才会吃到它 ——
  * packages/ui 之类的库不会。

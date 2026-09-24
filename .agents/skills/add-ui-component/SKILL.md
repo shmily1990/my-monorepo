@@ -80,7 +80,7 @@ pnpm check-types
 pnpm build        # from the repo root — confirms the app can compile the new export
 ```
 
-If you want to see it working, use it in `apps/web/app/antd-demo.tsx`, which exists as a wiring example. Anything using antd state or `App.useApp()` must be a client component.
+Anything using antd state or `App.useApp()` must be a client component — see the `apps/openrouter-web` section of [`AGENTS.md`](../../../AGENTS.md).
 
 ## Checklist
 

@@ -6,6 +6,16 @@ allowBuilds:
   # napi-postinstall 的兜底检查。本机所需的 @unrs/resolver-binding-darwin-arm64 已随
   # optionalDependencies 正常安装，原生 .node 文件就位，因此无需执行该脚本。
   unrs-resolver: false
+  # sharp 是 Next 的图片优化依赖，随预编译二进制分发，它的 postinstall 无需执行。
+  # 这条原本写在 apps/openrouter-web 目录内的一个嵌套 pnpm-workspace.yaml 里——那个文件
+  # 会让 pnpm 把该应用当成独立的 workspace 根（于是有了自己的 lockfile 和 444M node_modules），
+  # 已删除，决策搬到这里。
+  sharp: false
+  # @parcel/watcher 是 sass 的 optionalDependency，即 sass 自己 --watch 时用的原生文件监听。
+  # 本仓库不跑 sass 自己的 watcher —— 编译由 Next/Turbopack 驱动 —— 所以它的构建脚本无需执行。
+  # 必须显式写成 false：只「忽略」的话 pnpm 11 会报 ERR_PNPM_IGNORED_BUILDS 并让后续命令
+  # （含 turbo 任务前的依赖状态检查）直接以退出码 1 失败。
+  "@parcel/watcher": false
 minimumReleaseAgeExclude:
   - "@typescript-eslint/eslint-plugin@8.70.1"
   - "@typescript-eslint/parser@8.70.1"

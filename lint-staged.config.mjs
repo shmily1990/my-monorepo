@@ -7,8 +7,14 @@ const WORKSPACE_PREFIX = /^(?:apps|packages)\/[^/]+\//;
 /** 交给 eslint + prettier 的代码文件 */
 const CODE_FILES = "**/*.{ts,tsx,js,jsx,mjs,cjs}";
 
-/** 只交给 prettier 的非代码文件 */
-const NON_CODE_FILES = "**/*.{json,md,css,yml,yaml}";
+/**
+ * 只交给 prettier 的非代码文件。
+ *
+ * scss / sass 必须在这里，否则会出现这种不一致：暂存的样式文件提交时不被格式化，
+ * 而根目录的 `pnpm format:check`（`prettier --check .`，全仓扫描）却能扫到它们并报错 ——
+ * 即"钩子放过了、检查却拦下了"。Prettier 本身是支持这两种后缀的。
+ */
+const NON_CODE_FILES = "**/*.{json,md,css,scss,sass,yml,yaml}";
 
 /**
  * 该 workspace 是否纳入 lint 范围 —— 判据是它有没有 `lint` 脚本。

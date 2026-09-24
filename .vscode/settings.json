@@ -7,6 +7,13 @@
   "eslint.enable": true,
   "eslint.debug": false,
   "eslint.workingDirectories": [{ "mode": "auto" }],
+  // 让编辑器用仓库锁定的那份 TypeScript，而不是 VS Code 自带的那份。
+  // 本仓库精确锁 TS 版本是有理由的（typescript-eslint 需要 TS 的经典 JS 编译器 API，
+  // TS 7 的原生移植版没有它）。VS Code 自带的 TS 会随编辑器升级而漂移，届时 IDE 的诊断
+  // 会与 `pnpm check-types` 不一致 —— 而那种不一致最难排查。
+  // 未安装依赖时该项自动失效，回退到自带版本，不会坏。
+  "typescript.tsdk": "node_modules/typescript/lib",
+  "typescript.enablePromptUseWorkspaceTsdk": true,
   "editor.codeActionsOnSave": {
     "source.fixAll.eslint": "explicit"
   },

@@ -11,6 +11,7 @@ dist
 # Generated files — never edit these by hand
 pnpm-lock.yaml
 next-env.d.ts
+pages.gen.ts
 *.tsbuildinfo
 
 # Binary assets

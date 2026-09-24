@@ -20,7 +20,7 @@ Everything is reachable from one entry point, so a future theme change or librar
 Two pieces are required, and they live in different places on purpose:
 
 ```tsx
-// apps/web/app/layout.tsx  — server component
+// apps/openrouter-web/app/layout.tsx  — server component
 import { AntdRegistry } from "@ant-design/nextjs-registry";
 import { UiProvider } from "@repo/ui";
 
@@ -61,6 +61,8 @@ The barrel entry is `"."` → `./src/index.ts`; the existing `./*` → `./src/*.
 1. Add `src/<name>.tsx` with `"use client"` if it is interactive.
 2. If it is a wrapper rather than a re-export, keep antd's props intact — type them with `ComponentProps<typeof AntX>` so `ref` forwards correctly under React 19.
 3. Export it from `src/index.ts`.
+
+Nothing else is needed: the consuming app imports it from the barrel and the Next.js registry (`@ant-design/nextjs-registry`, mounted in the app's `layout.tsx`) takes care of extracting its styles during SSR.
 
 ## Version constraints
 

@@ -16,10 +16,10 @@ Each config is a plain JSON file consumed via `extends`. There is no build step,
 
 ## Who uses what
 
-| Workspace     | Config                                       |
-| ------------- | -------------------------------------------- |
-| `apps/web`    | `@repo/typescript-config/nextjs.json`        |
-| `packages/ui` | `@repo/typescript-config/react-library.json` |
+| Workspace             | Config                                       |
+| --------------------- | -------------------------------------------- |
+| `apps/openrouter-web` | `@repo/typescript-config/nextjs.json`        |
+| `packages/ui`         | `@repo/typescript-config/react-library.json` |
 
 ## Usage
 
@@ -80,6 +80,6 @@ pnpm check-types
 
 ## Known redundancy
 
-`apps/web` and `packages/ui` each set `"strictNullChecks": true` explicitly. This is redundant — `base.json` already enables it via `strict: true`. It is harmless and can be removed.
+`apps/openrouter-web` and `packages/ui` each set `"strictNullChecks": true` explicitly. This is redundant — `base.json` already enables it via `strict: true`. It is harmless and can be removed.
 
-`apps/web` likewise repeats the `plugins: [{ "name": "next" }]` entry that `nextjs.json` already provides.
+`apps/openrouter-web` likewise repeats the `plugins: [{ "name": "next" }]` entry that `nextjs.json` already provides.
