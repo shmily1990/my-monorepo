@@ -43,6 +43,8 @@ Two more are enforced by lint and will fail on you: **never import across packag
 
 And one that is easy to walk into: **any `process.env.X` is a lint error**, because `turbo.json` declares no `globalEnv` and `turbo/no-undeclared-env-vars` is set to `error`. So the usual `secure: process.env.NODE_ENV === "production"` fails `pnpm lint`. Reference an env var only after adding it to `turbo.json` (or to that rule's allow list). Separately, `import/order` is a _warning_, and since every `lint` script passes `--max-warnings 0`, a warning is a failure: import blocks must be externals → blank line → `@/…` → blank line → all relative imports and the stylesheet together, with **no** blank lines inside a group. `eslint --fix` normalises it.
 
+**Unused imports are an error, and `eslint --fix` deletes them** — so they disappear on save in the editor, in the pre-commit hook, and under `pnpm lint --fix`. Do not be surprised when an import you wrote mid-edit vanishes; re-add it (your editor's auto-import will) once the usage exists. `@typescript-eslint/no-unused-vars` is deliberately set to `off` and its two halves are handled by `eslint-plugin-unused-imports`; see [`packages/eslint-config/README.md`](packages/eslint-config/README.md) for why the three rules must move together.
+
 ## Per-workspace rules
 
 Each of these was a separate `CLAUDE.md` before; they are consolidated here so no per-package agent file has to be maintained. The full explanation for each is in that package's `README.md`.

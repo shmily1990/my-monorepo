@@ -48,6 +48,16 @@ The workspace must declare it as a `workspace:*` dev dependency:
 
 **Errors are errors.** There is no `eslint-plugin-only-warn`, and every lint script passes `--max-warnings 0`. A warning fails lint exactly like an error — so lower a rule's severity only when you mean to.
 
+**Unused imports are removed automatically.** `unused-imports/no-unused-imports` (`error`) is fixable, so `eslint --fix` — and therefore save-in-editor, the pre-commit hook, and `pnpm lint` run with `--fix` — deletes the dead import rather than just complaining. That rule is paired with two others, and the three must move together:
+
+- `unused-imports/no-unused-imports` — `error`, fixable: the unused imports.
+- `unused-imports/no-unused-vars` — `warn`: everything `@typescript-eslint/no-unused-vars` used to catch _except_ imports.
+- `@typescript-eslint/no-unused-vars` — **`off`**, because `eslint-plugin-unused-imports` splits that rule rather than replacing it wholesale. Leaving it on reports every unused variable twice.
+
+The failure mode to watch for: adding only `no-unused-imports` and forgetting `no-unused-vars`. Unused _variables_ then stop being reported at all, with nothing to signal the check disappeared. `^_`-prefixed identifiers are exempt (both `varsIgnorePattern` and `argsIgnorePattern`).
+
+One consequence to expect: because the fix runs on save, an import you have written but not yet used will be deleted the moment you save. That is the trade for never accumulating dead imports.
+
 **Type-aware linting needs a tsconfig per workspace.** `projectService` is enabled and `tsconfigRootDir` resolves from the workspace's cwd, which Turborepo sets to that workspace. Any workspace that gets linted must have its own `tsconfig.json` extending `@repo/typescript-config` — otherwise lint fails outright rather than quietly skipping the file.
 
 **`react.js` is internal.** It is the shared React layer imported by both `react-library.js` and `next.js`, and is deliberately excluded from `exports`.

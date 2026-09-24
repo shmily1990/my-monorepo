@@ -2,6 +2,7 @@ import js from "@eslint/js";
 import eslintConfigPrettier from "eslint-config-prettier/flat";
 import importPlugin from "eslint-plugin-import";
 import turboPlugin from "eslint-plugin-turbo";
+import unusedImports from "eslint-plugin-unused-imports";
 import globals from "globals";
 import tseslint from "typescript-eslint";
 
@@ -50,14 +51,46 @@ export const baseConfig = [
     },
   },
 
-  // TS 规则：覆盖 tseslint.configs.recommended 的默认值（它将这两条设为 error）
+  // TS 规则：覆盖 tseslint.configs.recommended 的默认值
   {
     files: TS_FILES,
+    plugins: {
+      "unused-imports": unusedImports,
+    },
     rules: {
-      "@typescript-eslint/no-unused-vars": [
+      /*
+       * 未使用的 import 交给 unused-imports —— 与 @typescript-eslint/no-unused-vars 的
+       * 关键差别是它**可自动修复**：`eslint --fix`（以及编辑器保存时的
+       * source.fixAll.eslint、提交钩子里的 lint-staged）会把多余的 import 直接删掉，
+       * 而原规则只能报告、改不了。
+       *
+       * 两条必须成对出现，少一条都会出问题：
+       *
+       * 1. **原规则必须关掉。** 这个插件是在 no-unused-vars 之上做拆分的
+       *    （插件 README：it composes the rule `no-unused-vars` of either the typescript
+       *    or js plugin）。原规则与它的分叉同时开着，同一个未使用变量会被报两次，
+       *    而且两条的修复行为会互相干扰。
+       *
+       * 2. **关掉之后，未使用的「变量」要靠 unused-imports/no-unused-vars 接手。**
+       *    只加 no-unused-imports 而不加这一条，非 import 的未使用变量就再也没有规则管了 ——
+       *    检查会**静默消失**，不会有任何提示。这是这次改动里最容易漏、也最危险的一步。
+       *
+       * 选项用的是插件 README 的推荐值。相比改动前的 `{ argsIgnorePattern: "^_" }`，
+       * 多了一条 `varsIgnorePattern: "^_"`：**行为差异在这里** —— `_` 开头的未使用局部变量
+       * 从此不再告警（此前只有函数参数享受这个豁免）。这属于放宽，去掉那一行即可还原。
+       */
+      "@typescript-eslint/no-unused-vars": "off",
+      "unused-imports/no-unused-imports": "error",
+      "unused-imports/no-unused-vars": [
         "warn",
-        { argsIgnorePattern: "^_" },
+        {
+          vars: "all",
+          varsIgnorePattern: "^_",
+          args: "after-used",
+          argsIgnorePattern: "^_",
+        },
       ],
+
       "@typescript-eslint/no-explicit-any": "error",
     },
   },
