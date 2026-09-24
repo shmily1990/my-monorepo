@@ -1,0 +1,68 @@
+.section {
+  max-width: var(--or-content-max);
+  margin-inline: auto;
+  padding: var(--or-space-9) var(--or-space-6) 0;
+}
+
+/* 参考图是四张等宽卡片一行排开 */
+.grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: var(--or-space-5);
+}
+
+.card {
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  background: var(--or-surface);
+  border: 1px solid var(--or-border);
+  border-radius: var(--or-radius-xl);
+  box-shadow: 0 1px 2px rgb(0 0 0 / 4%);
+}
+
+/*
+ * 插图区固定在 200px 高并裁掉溢出：四张插图的内容高度差别很大
+ * （三行瓦片 vs 一个盾牌），不固定的话四张卡片的标题会参差不齐。
+ */
+.art {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 200px;
+  padding: var(--or-space-4);
+  overflow: hidden;
+  background: var(--or-surface-subtle);
+  border-bottom: 1px solid var(--or-border);
+}
+
+.title {
+  margin: var(--or-space-5) var(--or-space-5) 0;
+  font-size: var(--or-fs-lg);
+  font-weight: var(--or-fw-semibold);
+  letter-spacing: var(--or-tracking-snug);
+  color: var(--or-text);
+}
+
+.body {
+  margin: var(--or-space-3) var(--or-space-5) var(--or-space-6);
+  font-size: var(--or-fs-base);
+  line-height: 1.6;
+  color: var(--or-text-muted);
+}
+
+@media (max-width: 1200px) {
+  .grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 640px) {
+  .section {
+    padding: var(--or-space-8) var(--or-space-4) 0;
+  }
+
+  .grid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}

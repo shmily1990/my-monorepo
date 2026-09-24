@@ -1,0 +1,40 @@
+/*
+ * 参考图里说明文字占很宽，控件固定在右侧约 1/3。
+ * 用两列网格而不是 flex + 固定宽度：说明文字换行时控件列不会被推着走。
+ */
+.field {
+  display: grid;
+  grid-template-columns: minmax(0, 1.75fr) minmax(0, 1fr);
+  gap: var(--or-space-7);
+  align-items: start;
+  padding-block: var(--or-space-6);
+}
+
+.text {
+  min-width: 0;
+}
+
+.label {
+  font-size: var(--or-fs-lg);
+  font-weight: var(--or-fw-semibold);
+  color: var(--or-text);
+}
+
+.description {
+  margin: var(--or-space-2) 0 0;
+  font-size: var(--or-fs-md);
+  line-height: 1.6;
+  color: var(--or-text-muted);
+}
+
+.control {
+  min-width: 0;
+}
+
+@media (max-width: 900px) {
+  /* 说明与控件上下排：并排时控件会被压到只剩几十像素 */
+  .field {
+    grid-template-columns: minmax(0, 1fr);
+    gap: var(--or-space-4);
+  }
+}

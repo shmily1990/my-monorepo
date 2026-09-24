@@ -1,0 +1,19 @@
+/* 主列的内边距。没有 max-width —— 工作台要铺满，不像营销页那样收在 1280 里 */
+.page {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  padding: var(--or-space-7) var(--or-space-8) var(--or-space-9);
+}
+
+@media (max-width: 900px) {
+  .page {
+    padding: var(--or-space-6) var(--or-space-5) var(--or-space-8);
+  }
+}
+
+@media (max-width: 640px) {
+  .page {
+    padding: var(--or-space-5) var(--or-space-4) var(--or-space-7);
+  }
+}

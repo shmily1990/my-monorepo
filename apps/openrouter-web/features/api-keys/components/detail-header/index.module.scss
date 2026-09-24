@@ -1,0 +1,130 @@
+.header {
+  display: flex;
+  flex-direction: column;
+  gap: var(--or-space-5);
+}
+
+.breadcrumb {
+  display: flex;
+  align-items: center;
+  gap: var(--or-space-3);
+  font-size: var(--or-fs-lg);
+  color: var(--or-text-muted);
+}
+
+.back {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  color: var(--or-text-body);
+  border-radius: var(--or-radius);
+
+  &:hover {
+    color: var(--or-text);
+    background: var(--or-surface-hover);
+  }
+}
+
+.crumb {
+  &:hover {
+    color: var(--or-text);
+  }
+}
+
+.separator {
+  color: var(--or-text-subtle);
+}
+
+/* 当前页在面包屑里是纯文字，不是链接 —— 点它等于原地刷新 */
+.current {
+  color: var(--or-text-body);
+}
+
+.head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: var(--or-space-5);
+}
+
+.identity {
+  min-width: 0;
+}
+
+.nameRow {
+  display: flex;
+  align-items: center;
+  gap: var(--or-space-4);
+}
+
+.name {
+  margin: 0;
+  font-size: var(--or-fs-3xl);
+  font-weight: var(--or-fw-bold);
+  letter-spacing: var(--or-tracking-tight);
+  color: var(--or-text);
+}
+
+.status {
+  padding: var(--or-space-1) var(--or-space-3);
+  font-size: var(--or-fs-base);
+  font-weight: var(--or-fw-medium);
+  border-radius: var(--or-radius-pill);
+}
+
+.enabled {
+  color: var(--or-success);
+  background: var(--or-success-soft);
+}
+
+/* 停用态用中性灰而不是红色：停用是正常状态，不是错误 */
+.disabled {
+  color: var(--or-text-muted);
+  background: var(--or-surface-sunken);
+}
+
+.meta {
+  display: flex;
+  align-items: center;
+  gap: var(--or-space-3);
+  margin: var(--or-space-3) 0 0;
+  font-size: var(--or-fs-lg);
+  color: var(--or-text-muted);
+}
+
+.metaIcon {
+  color: var(--or-text-subtle);
+}
+
+.mono {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+}
+
+.dot {
+  color: var(--or-text-subtle);
+}
+
+.actions {
+  display: flex;
+  flex: none;
+  gap: var(--or-space-3);
+}
+
+@media (max-width: 900px) {
+  .head {
+    flex-direction: column;
+    align-items: stretch;
+    gap: var(--or-space-5);
+  }
+
+  .name {
+    font-size: var(--or-fs-2xl);
+  }
+
+  .meta {
+    flex-wrap: wrap;
+    font-size: var(--or-fs-md);
+  }
+}

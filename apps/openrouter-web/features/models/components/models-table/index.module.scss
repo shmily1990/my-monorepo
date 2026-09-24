@@ -1,0 +1,52 @@
+/* 窄屏时让表格自己横向滚动，而不是把整个页面撑宽 */
+.scroll {
+  overflow-x: auto;
+  border: 1px solid var(--or-border);
+  border-radius: var(--or-radius-lg);
+}
+
+.table {
+  width: 100%;
+  min-width: 720px;
+  border-collapse: collapse;
+  font-size: var(--or-fs-base);
+
+  th,
+  td {
+    padding: var(--or-space-3) var(--or-space-4);
+    text-align: left;
+    border-bottom: 1px solid var(--or-border);
+  }
+
+  th {
+    font-weight: var(--or-fw-medium);
+    color: var(--or-text-muted);
+    background: var(--or-surface-subtle);
+  }
+
+  tbody tr:last-child td {
+    border-bottom: 0;
+  }
+
+  tbody tr:hover td {
+    background: var(--or-surface-subtle);
+  }
+}
+
+.nameCell {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--or-space-3);
+  font-weight: var(--or-fw-medium);
+  color: var(--or-text);
+}
+
+/*
+ * 写成 `.table .numeric` 而不是裸的 `.numeric`：
+ * 上面 `.table th, .table td` 的特异性是 (0,1,1)，单类名的 (0,1,0) 盖不过它，
+ * 而靠 !important 压过去会让后续任何调整都跟着加 important。提高一层选择器就够了。
+ */
+.table .numeric {
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}

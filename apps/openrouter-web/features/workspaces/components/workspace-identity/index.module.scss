@@ -1,0 +1,50 @@
+.identity {
+  display: flex;
+  align-items: center;
+  gap: var(--or-space-5);
+}
+
+.avatarWrap {
+  position: relative;
+  display: flex;
+  flex: none;
+}
+
+.avatar {
+  color: var(--or-text-muted);
+  background: var(--or-surface-sunken);
+}
+
+/* 压在头像右下角的相机徽标 */
+.camera {
+  position: absolute;
+  right: -2px;
+  bottom: -2px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 22px;
+  height: 22px;
+  color: var(--or-text-muted);
+  background: var(--or-surface);
+  border: 1px solid var(--or-border);
+  border-radius: var(--or-radius-pill);
+}
+
+.text {
+  min-width: 0;
+}
+
+.name {
+  margin: 0;
+  font-size: var(--or-fs-2xl);
+  font-weight: var(--or-fw-bold);
+  letter-spacing: var(--or-tracking-tight);
+  color: var(--or-text);
+}
+
+.email {
+  margin: var(--or-space-1) 0 0;
+  font-size: var(--or-fs-lg);
+  color: var(--or-text-muted);
+}

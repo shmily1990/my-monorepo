@@ -1,0 +1,110 @@
+/*
+ * 侧栏独立滚动：吸在 header 下方，高度占满剩余视口。
+ * 参考图里侧栏有自己的滚动条，与主列互不影响。
+ */
+.sidebar {
+  position: sticky;
+  top: var(--or-header-height);
+  display: flex;
+  flex-direction: column;
+  gap: var(--or-space-5);
+  align-self: start;
+  width: var(--or-sidebar-width);
+  max-height: calc(100vh - var(--or-header-height));
+  padding: var(--or-space-5) var(--or-space-4);
+  overflow-y: auto;
+  border-right: 1px solid var(--or-border);
+}
+
+.switcher {
+  flex: none;
+  width: 100%;
+}
+
+.group {
+  display: flex;
+  flex-direction: column;
+  gap: var(--or-space-2);
+}
+
+/* 「ACCOUNT」这类分组小标题 */
+.groupTitle {
+  margin: var(--or-space-2) 0 0;
+  padding-inline: var(--or-space-3);
+  font-size: var(--or-fs-xs);
+  font-weight: var(--or-fw-semibold);
+  color: var(--or-text-subtle);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+
+.list {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.item {
+  display: flex;
+  align-items: center;
+  gap: var(--or-space-3);
+  padding: var(--or-space-2) var(--or-space-3);
+  font-size: var(--or-fs-md);
+  color: var(--or-text-body);
+  border-radius: var(--or-radius);
+
+  &:hover {
+    color: var(--or-text);
+    background: var(--or-surface-hover);
+  }
+}
+
+/* 当前项：浅紫底 + 品牌色文字，与参考图一致 */
+.itemActive {
+  color: var(--or-brand);
+  background: var(--or-brand-soft);
+
+  &:hover {
+    color: var(--or-brand);
+    background: var(--or-brand-soft);
+  }
+}
+
+.icon {
+  display: inline-flex;
+  flex: none;
+  color: var(--or-text-subtle);
+}
+
+.itemActive .icon {
+  color: var(--or-brand);
+}
+
+.label {
+  flex: 1;
+  min-width: 0;
+}
+
+.badge {
+  flex: none;
+  padding: 1px var(--or-space-2);
+  font-size: var(--or-fs-xs);
+  font-weight: var(--or-fw-medium);
+  color: var(--or-info);
+  background: var(--or-info-soft);
+  border-radius: var(--or-radius-sm);
+}
+
+/* 窄屏：侧栏改为常规文档流，不再吸顶、不再独立滚动 */
+@media (max-width: 900px) {
+  .sidebar {
+    position: static;
+    width: 100%;
+    max-height: none;
+    border-right: 0;
+    border-bottom: 1px solid var(--or-border);
+  }
+}

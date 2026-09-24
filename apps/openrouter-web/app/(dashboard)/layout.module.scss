@@ -1,0 +1,17 @@
+/* 侧栏固定宽 + 主列吃掉剩余空间 */
+.shell {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  align-items: start;
+}
+
+.content {
+  /* min-width: 0 是必需的：否则主列里任何有 min-width 的东西会把网格列撑宽 */
+  min-width: 0;
+}
+
+@media (max-width: 900px) {
+  .shell {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}

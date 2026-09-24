@@ -1,0 +1,23 @@
+/*
+ * 竖排而不是参考图的横排三个图标按钮。
+ *
+ * 这是"改成纯文字"的必然结果：三个 "Continue with …" 在 440px 宽的弹框里横排放不下。
+ * 竖排也正是真实世界的常见做法（Google 自己的登录框就是这样），且每个按钮都是整行，
+ * 点击目标更大。
+ *
+ * ⚠️ 这一组 `<form>` 必须渲染在登录/注册主 `<form>` **之外** ——
+ * form 不能嵌套，浏览器会丢弃内层的那一个。
+ */
+.providers {
+  display: flex;
+  flex-direction: column;
+  gap: var(--or-space-3);
+}
+
+.form {
+  display: block;
+}
+
+.button {
+  justify-content: center;
+}

@@ -1,0 +1,46 @@
+.trigger {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--or-space-3);
+  flex: none;
+  padding: var(--or-space-1) var(--or-space-2);
+  font: inherit;
+  color: var(--or-text);
+  background: none;
+  border: 0;
+  border-radius: var(--or-radius-pill);
+  cursor: pointer;
+
+  &:hover {
+    background: var(--or-surface-hover);
+  }
+}
+
+.avatar {
+  flex: none;
+  color: var(--or-text-muted);
+  background: var(--or-surface-sunken);
+}
+
+.name {
+  font-size: var(--or-fs-md);
+  white-space: nowrap;
+}
+
+.chevron {
+  flex: none;
+  color: var(--or-text-subtle);
+}
+
+/* 菜单项是多行文本时要占满整行，点击区域才不会被 antd 的默认内边距切碎 */
+.menuLink {
+  display: block;
+  color: inherit;
+}
+
+@media (max-width: 1200px) {
+  /* 与导航链接一起收窄：窄屏只留头像与箭头 */
+  .name {
+    display: none;
+  }
+}

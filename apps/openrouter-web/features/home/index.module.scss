@@ -1,0 +1,13 @@
+/*
+ * 首页容器。
+ *
+ * 各区块自带 padding 与 max-width（见 components/*），这里只兜住一件事：
+ * 特性卡的插图里有轻微旋转的元素（observability-charts 那张叠放的图表卡），
+ * 窄屏下可能撑出横向滚动条。
+ *
+ * 用 clip 而不是 hidden：hidden 会让本元素成为滚动容器，从而改变后代里
+ * position: sticky 的参照；clip 不会。
+ */
+.page {
+  overflow-x: clip;
+}

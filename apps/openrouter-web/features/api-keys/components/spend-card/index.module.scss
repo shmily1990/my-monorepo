@@ -1,0 +1,35 @@
+.card {
+  margin-top: var(--or-space-6);
+  padding: var(--or-space-6);
+  background: var(--or-surface);
+  border: 1px solid var(--or-border);
+  border-radius: var(--or-radius-lg);
+}
+
+.title {
+  margin: 0;
+  font-size: var(--or-fs-lg);
+  font-weight: var(--or-fw-medium);
+  color: var(--or-text-body);
+}
+
+.total {
+  margin: var(--or-space-3) 0 0;
+  font-size: var(--or-fs-3xl);
+  font-weight: var(--or-fw-bold);
+  letter-spacing: var(--or-tracking-tight);
+  color: var(--or-text);
+}
+
+/* 空图表的框架：一条虚线基线，表示"这里本应有柱状图" */
+.plot {
+  height: 120px;
+  margin-top: var(--or-space-5);
+  border-bottom: 1px dashed var(--or-border-strong);
+}
+
+.empty {
+  margin: var(--or-space-3) 0 0;
+  font-size: var(--or-fs-base);
+  color: var(--or-text-muted);
+}

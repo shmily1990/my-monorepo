@@ -1,0 +1,29 @@
+.card {
+  margin-top: var(--or-space-6);
+  background: var(--or-surface);
+  border: 1px solid var(--or-border);
+  border-radius: var(--or-radius-lg);
+  /* 表格在窄屏会横向滚动，圆角要裁掉它溢出的直角 */
+  overflow: hidden;
+}
+
+.searchRow {
+  padding: var(--or-space-5) var(--or-space-5) var(--or-space-4);
+}
+
+.search {
+  max-width: 440px;
+  background: var(--or-surface);
+  border-color: var(--or-border);
+
+  &:hover,
+  &:focus-within {
+    border-color: var(--or-border-strong);
+  }
+}
+
+.footer {
+  padding: var(--or-space-4) var(--or-space-5);
+  font-size: var(--or-fs-base);
+  color: var(--or-text-muted);
+}

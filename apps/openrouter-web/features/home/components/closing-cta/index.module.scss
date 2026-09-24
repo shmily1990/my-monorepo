@@ -1,0 +1,102 @@
+.section {
+  max-width: var(--or-content-max);
+  margin-inline: auto;
+  padding: var(--or-space-10) var(--or-space-6) 0;
+}
+
+.inner {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: var(--or-space-9) var(--or-space-6);
+  text-align: center;
+  background: var(--or-brand-soft);
+  border-radius: var(--or-radius-xl);
+}
+
+.title {
+  margin: 0;
+  font-size: var(--or-fs-3xl);
+  font-weight: var(--or-fw-bold);
+  letter-spacing: var(--or-tracking-tight);
+  color: var(--or-text);
+}
+
+.body {
+  margin: var(--or-space-4) 0 0;
+  font-size: var(--or-fs-lg);
+  color: var(--or-text-body);
+}
+
+.actions {
+  display: flex;
+  align-items: center;
+  gap: var(--or-space-4);
+  margin-top: var(--or-space-7);
+}
+
+/* 与首屏 hero 的两个按钮同规格，页面首尾保持一致。
+   .primary 现在是 <button>、.secondary 仍是 <Link>，所以 border/cursor 一起给上。 */
+.primary,
+.secondary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  height: 52px;
+  padding-inline: var(--or-space-7);
+  font-size: var(--or-fs-lg);
+  font-weight: var(--or-fw-medium);
+  white-space: nowrap;
+  border: 0;
+  border-radius: var(--or-radius-lg);
+  cursor: pointer;
+}
+
+.primary {
+  color: #fff;
+  background: var(--or-brand);
+
+  &:hover {
+    background: var(--or-brand-hover);
+  }
+}
+
+.secondary {
+  color: var(--or-text);
+  background: var(--or-surface);
+  border: 1px solid var(--or-border-strong);
+
+  &:hover {
+    border-color: var(--or-text-subtle);
+  }
+}
+
+@media (max-width: 640px) {
+  .section {
+    padding: var(--or-space-9) var(--or-space-4) 0;
+  }
+
+  .inner {
+    padding: var(--or-space-7) var(--or-space-4);
+  }
+
+  .title {
+    font-size: var(--or-fs-2xl);
+  }
+
+  .body {
+    font-size: var(--or-fs-md);
+  }
+
+  .actions {
+    flex-direction: column;
+    align-self: stretch;
+    gap: var(--or-space-3);
+  }
+
+  .primary,
+  .secondary {
+    width: 100%;
+    height: 48px;
+  }
+}

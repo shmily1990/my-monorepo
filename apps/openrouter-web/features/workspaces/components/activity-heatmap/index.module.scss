@@ -1,0 +1,67 @@
+.wrap {
+  display: flex;
+  flex-direction: column;
+  gap: var(--or-space-3);
+  /* 53 列在小屏上放不下，让它自己横向滚，而不是把整页撑宽 */
+  overflow-x: auto;
+}
+
+.months {
+  display: flex;
+  justify-content: space-between;
+  /* 左边让出与 .rowLabel 等宽的位置，月份才与格子区域对齐 */
+  padding-left: 24px;
+  font-size: var(--or-fs-xs);
+  color: var(--or-text-subtle);
+}
+
+.grid {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+/*
+ * 固定 10px 的格子而不是 1fr：热力图的读法依赖格子是正方且整齐的，
+ * 让它随容器拉伸会得到大小不一的方块。总宽 = 24 + 53×10 + 52×3 = 706px，
+ * 在内容列（约 950px）里放得下，窄屏则由 .wrap 横向滚动。
+ */
+.row {
+  display: grid;
+  grid-template-columns: 24px repeat(53, 10px);
+  gap: 3px;
+  align-items: center;
+}
+
+.rowLabel {
+  font-size: var(--or-fs-xs);
+  color: var(--or-text-subtle);
+}
+
+.cell {
+  width: 10px;
+  height: 10px;
+  background: var(--or-surface-sunken);
+  border-radius: 2px;
+}
+
+/* 色阶。全 0 的空账号只用到第一档（空格子），其余三档是给日后真实数据留的。 */
+.level1 {
+  background: var(--or-heat-1);
+}
+
+.level2 {
+  background: var(--or-heat-2);
+}
+
+.level3 {
+  background: var(--or-heat-3);
+}
+
+.legend {
+  display: flex;
+  align-items: center;
+  gap: var(--or-space-2);
+  font-size: var(--or-fs-xs);
+  color: var(--or-text-subtle);
+}

@@ -1,0 +1,23 @@
+.trigger {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  color: var(--or-text-muted);
+  background: none;
+  border: 0;
+  border-radius: var(--or-radius);
+  cursor: pointer;
+
+  &:hover {
+    color: var(--or-text);
+    background: var(--or-surface-hover);
+  }
+}
+
+/* 菜单项是个链接时要占满整行，点击区域才不会被 antd 的内边距切碎 */
+.menuLink {
+  display: block;
+  color: inherit;
+}

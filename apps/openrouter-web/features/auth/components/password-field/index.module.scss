@@ -1,0 +1,37 @@
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: var(--or-space-2);
+  min-width: 0;
+}
+
+.label {
+  font-size: var(--or-fs-md);
+  color: var(--or-text);
+}
+
+.input {
+  background: var(--or-surface-subtle);
+  border-color: var(--or-border);
+
+  &:hover,
+  &:focus-within {
+    border-color: var(--or-border-strong);
+  }
+}
+
+/* 眼睛按钮：去掉按钮的一切默认表现，只留图标 */
+.eye {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  color: var(--or-text-subtle);
+  background: none;
+  border: 0;
+  cursor: pointer;
+
+  &:hover {
+    color: var(--or-text);
+  }
+}

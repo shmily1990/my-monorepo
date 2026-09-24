@@ -1,0 +1,50 @@
+.section {
+  border-bottom: 1px solid var(--or-border);
+}
+
+.trigger {
+  display: flex;
+  align-items: center;
+  gap: var(--or-space-3);
+  width: 100%;
+  padding: var(--or-space-4) 0;
+  font-size: var(--or-fs-md);
+  font-weight: var(--or-fw-medium);
+  color: var(--or-text);
+  text-align: left;
+  background: none;
+  border: 0;
+  cursor: pointer;
+
+  &:hover {
+    color: var(--or-brand);
+  }
+}
+
+.icon {
+  display: inline-flex;
+  flex: none;
+  color: var(--or-text-subtle);
+}
+
+.label {
+  flex: 1;
+}
+
+.chevron {
+  flex: none;
+  color: var(--or-text-subtle);
+  transition: transform 0.15s ease;
+}
+
+/* 箭头随展开状态翻转。属性选择器写在 :global 之外，CSS Modules 只会给类名加哈希。 */
+.trigger[aria-expanded="true"] .chevron {
+  transform: rotate(180deg);
+}
+
+.panel {
+  display: flex;
+  flex-direction: column;
+  gap: var(--or-space-3);
+  padding: 0 0 var(--or-space-4) var(--or-space-6);
+}

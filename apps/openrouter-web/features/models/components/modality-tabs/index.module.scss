@@ -1,0 +1,69 @@
+.strip {
+  display: flex;
+  align-items: center;
+  gap: var(--or-space-5);
+  overflow-x: auto;
+  border-bottom: 1px solid var(--or-border);
+}
+
+/* 点 More 之后：换成可换行的静态排布，所有页签一次看全 */
+.expanded {
+  flex-wrap: wrap;
+  overflow-x: visible;
+  border-bottom: 0;
+}
+
+.tab {
+  position: relative;
+  display: inline-flex;
+  flex: none;
+  align-items: center;
+  gap: var(--or-space-2);
+  padding: var(--or-space-3) 0;
+  font-size: var(--or-fs-base);
+  color: var(--or-text-muted);
+  white-space: nowrap;
+  background: none;
+  border: 0;
+  cursor: pointer;
+
+  &:hover {
+    color: var(--or-text);
+  }
+}
+
+/* 选中态：品牌色文字 + 底部 2px 下划线，下划线压在整条的底边线上 */
+.active {
+  color: var(--or-brand);
+
+  &::after {
+    content: "";
+    position: absolute;
+    right: 0;
+    bottom: -1px;
+    left: 0;
+    height: 2px;
+    background: var(--or-brand);
+  }
+}
+
+.count {
+  color: var(--or-text-subtle);
+}
+
+.active .count {
+  color: var(--or-brand);
+}
+
+.more {
+  margin-left: auto;
+  color: var(--or-text-subtle);
+}
+
+.chevron {
+  transition: transform 0.15s ease;
+}
+
+.more[aria-expanded="true"] .chevron {
+  transform: rotate(180deg);
+}

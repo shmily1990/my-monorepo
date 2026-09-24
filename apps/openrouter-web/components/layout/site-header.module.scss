@@ -1,0 +1,31 @@
+.header {
+  position: sticky;
+  top: 0;
+  z-index: var(--or-z-header);
+  background: var(--or-surface);
+  border-bottom: 1px solid var(--or-border);
+}
+
+/*
+ * 参考图里 header 是**通栏**的 —— logo 几乎贴着视口左边，内容区并没有收在
+ * 1280 的容器里。所以这里不设 max-width，只用左右内边距留出呼吸。
+ * 页面正文（hero 等）才收在 --or-content-max 里。
+ */
+.inner {
+  display: flex;
+  align-items: center;
+  gap: var(--or-space-6);
+  height: var(--or-header-height);
+  padding-inline: var(--or-space-6);
+}
+
+.brand {
+  flex: none;
+}
+
+@media (max-width: 640px) {
+  .inner {
+    gap: var(--or-space-4);
+    padding-inline: var(--or-space-4);
+  }
+}

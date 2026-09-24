@@ -1,0 +1,82 @@
+.panel {
+  display: flex;
+  flex-direction: column;
+  gap: var(--or-space-6);
+  margin-top: var(--or-space-7);
+  padding-top: var(--or-space-7);
+  border-top: 1px solid var(--or-border);
+}
+
+.head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--or-space-4);
+}
+
+.title {
+  margin: 0;
+  font-size: var(--or-fs-xl);
+  font-weight: var(--or-fw-semibold);
+  letter-spacing: var(--or-tracking-snug);
+  color: var(--or-text);
+}
+
+.link {
+  font-size: var(--or-fs-base);
+  color: var(--or-text-muted);
+
+  &:hover {
+    color: var(--or-brand);
+  }
+}
+
+.stats {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  margin: 0;
+}
+
+/*
+ * 四项之间的竖线。用 border-left 而不是 antd 的 Divider —— 后者会撑满高度，
+ * 而这里希望分隔线只跟着内容高度走。
+ */
+.stat {
+  padding-inline: var(--or-space-5);
+
+  &:first-child {
+    padding-left: 0;
+  }
+
+  & + & {
+    border-left: 1px solid var(--or-border);
+  }
+}
+
+.statLabel {
+  font-size: var(--or-fs-base);
+  color: var(--or-text-muted);
+}
+
+.statValue {
+  margin: var(--or-space-2) 0 0;
+  font-size: var(--or-fs-xl);
+  font-weight: var(--or-fw-semibold);
+  color: var(--or-text);
+}
+
+@media (max-width: 900px) {
+  .stats {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: var(--or-space-5);
+  }
+
+  /* 两列排布时竖线的位置会错乱，干脆去掉 */
+  .stat {
+    padding-inline: 0;
+
+    & + & {
+      border-left: 0;
+    }
+  }
+}

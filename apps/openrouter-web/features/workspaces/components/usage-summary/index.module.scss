@@ -1,0 +1,89 @@
+.section {
+  margin-top: var(--or-space-7);
+}
+
+.head {
+  display: flex;
+  align-items: center;
+  gap: var(--or-space-4);
+  flex-wrap: wrap;
+}
+
+.title {
+  margin: 0;
+  font-size: var(--or-fs-xl);
+  font-weight: var(--or-fw-semibold);
+  letter-spacing: var(--or-tracking-snug);
+  color: var(--or-text);
+}
+
+.range {
+  min-width: 160px;
+}
+
+.metric {
+  flex: none;
+}
+
+.figure {
+  margin-top: var(--or-space-6);
+}
+
+/* 参考图里这个大数字非常醒目，是整页的视觉重心 */
+.total {
+  margin: 0;
+  font-size: var(--or-fs-stat);
+  font-weight: var(--or-fw-bold);
+  letter-spacing: var(--or-tracking-tight);
+  color: var(--or-text);
+}
+
+.note {
+  margin: var(--or-space-2) 0 0;
+  font-size: var(--or-fs-base);
+  color: var(--or-text-muted);
+}
+
+/*
+ * 图表占主要宽度，右侧那两栏是窄的补充信息。
+ * 参考图里两者之间有一条竖向分隔线。
+ */
+.split {
+  display: grid;
+  grid-template-columns: minmax(0, 2.2fr) minmax(0, 1fr);
+  gap: var(--or-space-7);
+  margin-top: var(--or-space-7);
+}
+
+.split > * + * {
+  padding-left: var(--or-space-7);
+  border-left: 1px solid var(--or-border);
+}
+
+@media (max-width: 900px) {
+  .split {
+    grid-template-columns: minmax(0, 1fr);
+    gap: var(--or-space-6);
+  }
+
+  .split > * + * {
+    padding-top: var(--or-space-6);
+    padding-left: 0;
+    border-top: 1px solid var(--or-border);
+    border-left: 0;
+  }
+}
+
+@media (max-width: 640px) {
+  .head {
+    align-items: stretch;
+  }
+
+  .range {
+    min-width: 0;
+  }
+
+  .total {
+    font-size: var(--or-fs-3xl);
+  }
+}

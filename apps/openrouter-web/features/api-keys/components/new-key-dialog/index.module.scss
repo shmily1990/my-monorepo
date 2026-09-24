@@ -1,0 +1,40 @@
+.body {
+  display: flex;
+  flex-direction: column;
+  gap: var(--or-space-5);
+  padding-block: var(--or-space-2) var(--or-space-4);
+}
+
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: var(--or-space-2);
+}
+
+.label {
+  font-size: var(--or-fs-md);
+  color: var(--or-text);
+}
+
+.description {
+  margin: 0;
+  font-size: var(--or-fs-base);
+  line-height: 1.55;
+  color: var(--or-text-muted);
+}
+
+.input {
+  background: var(--or-surface-subtle);
+  border-color: var(--or-border);
+
+  &:hover,
+  &:focus-within {
+    border-color: var(--or-border-strong);
+  }
+}
+
+.footer {
+  display: flex;
+  justify-content: flex-end;
+  gap: var(--or-space-3);
+}

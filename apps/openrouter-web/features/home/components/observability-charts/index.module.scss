@@ -1,0 +1,48 @@
+.stack {
+  position: relative;
+  width: 100%;
+  padding: var(--or-space-5) var(--or-space-4);
+}
+
+.card {
+  padding: var(--or-space-3);
+  background: var(--or-surface);
+  border: 1px solid var(--or-border);
+  border-radius: var(--or-radius);
+  box-shadow: 0 1px 2px rgb(0 0 0 / 4%);
+}
+
+/*
+ * 前面那张卡错开叠在后面那张上，并加了一点轻微旋转 —— 参考图里就是这种
+ * 「两张纸叠着」的效果。旋转角度很小，只是为了让叠放关系看得出来。
+ */
+.front {
+  position: relative;
+  z-index: 1;
+  width: 72%;
+  margin: calc(var(--or-space-5) * -1) 0 0 auto;
+  transform: rotate(-1.5deg);
+}
+
+.head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--or-space-2);
+  margin-bottom: var(--or-space-2);
+}
+
+.caption {
+  font-size: var(--or-fs-xs);
+  color: var(--or-text-muted);
+}
+
+.grip {
+  color: var(--or-text-subtle);
+}
+
+.chart {
+  display: block;
+  width: 100%;
+  height: 46px;
+}

@@ -1,0 +1,62 @@
+.page {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  padding: var(--or-space-7) var(--or-space-8) var(--or-space-9);
+}
+
+.card {
+  margin-top: var(--or-space-6);
+  padding-inline: var(--or-space-6);
+  padding-block: var(--or-space-1);
+  background: var(--or-surface);
+  border: 1px solid var(--or-border);
+  border-radius: var(--or-radius-lg);
+}
+
+/*
+ * 各设置项之间的分隔线。
+ * 写成 `> * + *` 而不是给每个 DetailField 加 border-bottom —— 这样最后一行
+ * （以及后面那个按钮行）上方各有一条线，而最末尾不会多出一条。
+ */
+.card > * + * {
+  border-top: 1px solid var(--or-border);
+}
+
+/* 控件统一样式：高度与圆角交给 size="large" 与主题 token */
+.control {
+  width: 100%;
+  background: var(--or-surface-subtle);
+  border-color: var(--or-border);
+
+  &:hover,
+  &:focus-within {
+    border-color: var(--or-border-strong);
+  }
+}
+
+.actions {
+  display: flex;
+  justify-content: flex-end;
+  padding-block: var(--or-space-5);
+}
+
+@media (max-width: 900px) {
+  .page {
+    padding: var(--or-space-6) var(--or-space-5) var(--or-space-8);
+  }
+
+  .card {
+    padding-inline: var(--or-space-5);
+  }
+}
+
+@media (max-width: 640px) {
+  .page {
+    padding: var(--or-space-5) var(--or-space-4) var(--or-space-7);
+  }
+
+  .card {
+    padding-inline: var(--or-space-4);
+  }
+}

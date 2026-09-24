@@ -1,0 +1,107 @@
+.card {
+  padding: var(--or-space-4) var(--or-space-5);
+  background: var(--or-surface);
+  border: 1px solid var(--or-border);
+  border-radius: var(--or-radius-lg);
+
+  &:hover {
+    border-color: var(--or-border-strong);
+  }
+}
+
+.head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: var(--or-space-5);
+}
+
+.identity {
+  display: flex;
+  align-items: center;
+  gap: var(--or-space-3);
+  min-width: 0;
+}
+
+.name {
+  margin: 0;
+  font-size: var(--or-fs-lg);
+  font-weight: var(--or-fw-semibold);
+  letter-spacing: var(--or-tracking-snug);
+  color: var(--or-text);
+}
+
+/* 参考图里模型名后面那个蓝色小方块里的「T」 */
+.textBadge {
+  display: inline-flex;
+  flex: none;
+  align-items: center;
+  justify-content: center;
+  width: 18px;
+  height: 18px;
+  font-size: var(--or-fs-xs);
+  font-weight: var(--or-fw-semibold);
+  color: var(--or-info);
+  background: var(--or-info-soft);
+  border-radius: var(--or-radius-sm);
+}
+
+.badgeIcon {
+  flex: none;
+  color: var(--or-text-subtle);
+}
+
+.volume {
+  display: inline-flex;
+  flex: none;
+  align-items: center;
+  gap: var(--or-space-2);
+  font-size: var(--or-fs-base);
+  color: var(--or-text-muted);
+}
+
+.volumeIcon {
+  color: var(--or-text-subtle);
+}
+
+.description {
+  margin: var(--or-space-4) 0 0;
+  font-size: var(--or-fs-md);
+  line-height: 1.6;
+  color: var(--or-text-body);
+}
+
+/*
+ * 元信息行：相邻项之间画一条 1px 竖线。
+ * 用 `> * + *` 而不是给每项加 border-left —— 第一项不会多出一条左线。
+ */
+.meta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--or-space-3);
+  margin-top: var(--or-space-4);
+  font-size: var(--or-fs-base);
+  color: var(--or-text-muted);
+
+  > * + * {
+    padding-left: var(--or-space-3);
+    border-left: 1px solid var(--or-border);
+  }
+}
+
+@media (max-width: 640px) {
+  .card {
+    padding: var(--or-space-4);
+  }
+
+  /* 右对齐的 token 量在窄屏会和模型名挤在一起，改为上下排布 */
+  .head {
+    flex-direction: column;
+    gap: var(--or-space-3);
+  }
+
+  .volume {
+    align-self: flex-start;
+  }
+}

@@ -1,0 +1,15 @@
+/*
+ * 全局样式。
+ *
+ * antd 的组件样式由 @ant-design/nextjs-registry 在 SSR 阶段抽取、由 @repo/ui 的
+ * UiProvider 提供主题，**不在这里写**。
+ * 这里只放与 UI 库无关的最小 reset。
+ */
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+}

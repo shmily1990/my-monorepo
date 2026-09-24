@@ -1,0 +1,35 @@
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: var(--or-space-2);
+  min-width: 0;
+}
+
+.labelRow {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--or-space-3);
+}
+
+.label {
+  font-size: var(--or-fs-md);
+  color: var(--or-text);
+}
+
+/* 「Optional」这类提示：存在感要低，但不能低到看不见 */
+.hint {
+  font-size: var(--or-fs-base);
+  color: var(--or-text-subtle);
+}
+
+/* 高度与圆角交给 size="large" 与主题 token，这里只管底色与边框 */
+.input {
+  background: var(--or-surface-subtle);
+  border-color: var(--or-border);
+
+  &:hover,
+  &:focus-within {
+    border-color: var(--or-border-strong);
+  }
+}

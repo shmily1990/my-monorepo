@@ -1,0 +1,101 @@
+/* 列多且在窄屏会被挤扁，让它自己横向滚，而不是把整页撑宽 */
+.scroll {
+  overflow-x: auto;
+}
+
+.table {
+  width: 100%;
+  min-width: 880px;
+  border-collapse: collapse;
+  font-size: var(--or-fs-md);
+
+  th,
+  td {
+    padding: var(--or-space-4) var(--or-space-4);
+    text-align: left;
+    vertical-align: middle;
+    border-bottom: 1px solid var(--or-border);
+  }
+
+  th {
+    font-size: var(--or-fs-base);
+    font-weight: var(--or-fw-medium);
+    color: var(--or-text-muted);
+    white-space: nowrap;
+  }
+
+  tbody tr:hover td {
+    background: var(--or-surface-subtle);
+  }
+}
+
+/*
+ * 勾选列与行操作列都贴着表格边缘，不受统一的横向内边距。
+ * 同样要写 `.table .selectCell` 才盖得过上面那条 (0,1,1) 的规则 —— 见 .numeric 的说明。
+ */
+.table .selectCell {
+  width: 48px;
+  padding-inline: var(--or-space-2);
+  text-align: center;
+}
+
+.keyLink {
+  display: flex;
+  flex-direction: column;
+  gap: var(--or-space-1);
+}
+
+.keyName {
+  font-size: var(--or-fs-lg);
+  font-weight: var(--or-fw-semibold);
+  color: var(--or-text);
+}
+
+.keyValue {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  font-size: var(--or-fs-base);
+  color: var(--or-text-muted);
+}
+
+.muted {
+  color: var(--or-text-muted);
+}
+
+/*
+ * 写成 `.table .numeric` 而不是裸的 `.numeric`：上面 `.table th, .table td`
+ * 的特异性是 (0,1,1)，单类名盖不过它，而提一层选择器就够了 —— 不必用 !important。
+ */
+.table .numeric {
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+
+.limit {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--or-space-2);
+  white-space: nowrap;
+}
+
+/* 额度后面那个 TOTAL / RESET 小标记 */
+.limitKind {
+  padding: 1px var(--or-space-2);
+  font-size: var(--or-fs-xs);
+  font-weight: var(--or-fw-medium);
+  color: var(--or-text-muted);
+  background: var(--or-surface);
+  border: 1px solid var(--or-border);
+  border-radius: var(--or-radius-sm);
+}
+
+/* 只给读屏用的文字（比如操作列表头：视觉上是空的） */
+.srOnly {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}

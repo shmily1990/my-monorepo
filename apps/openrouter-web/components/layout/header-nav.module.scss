@@ -1,0 +1,33 @@
+.nav {
+  display: flex;
+  align-items: center;
+  gap: var(--or-space-6);
+  /* 把导航推到右侧：左边是 logo 与搜索框，右边是 HeaderAuth */
+  margin-left: auto;
+}
+
+.list {
+  display: flex;
+  align-items: center;
+  gap: var(--or-space-5);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.link {
+  font-size: var(--or-fs-md);
+  color: var(--or-text);
+  white-space: nowrap;
+
+  &:hover {
+    color: var(--or-brand);
+  }
+}
+
+/* 窄屏放不下 8 个链接：先收链接，保留 logo / 搜索 / 认证区 */
+@media (max-width: 1200px) {
+  .list {
+    display: none;
+  }
+}

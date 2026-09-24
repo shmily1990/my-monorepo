@@ -1,0 +1,55 @@
+/*
+ * 弹框外壳。分隔线能通栏，靠的是组件里 `styles={{ body: { padding: 0 } }}` 把 antd
+ * body 的默认内边距清零，改由 .content / .footer 自己撑开内边距。
+ */
+.header {
+  border-bottom: 0;
+  padding-bottom: 0;
+}
+
+.title {
+  font-size: var(--or-fs-2xl);
+  font-weight: var(--or-fw-bold);
+  letter-spacing: var(--or-tracking-tight);
+  text-align: center;
+}
+
+.content {
+  display: flex;
+  flex-direction: column;
+  gap: var(--or-space-5);
+  padding: var(--or-space-6) var(--or-space-6) 0;
+}
+
+.or {
+  margin: 0;
+  font-size: var(--or-fs-base);
+  color: var(--or-text-subtle);
+}
+
+/* 参考图里页脚是一条通栏的分隔带，上边框 + 浅底 */
+.footer {
+  margin-top: var(--or-space-6);
+  padding: var(--or-space-4) var(--or-space-6);
+  font-size: var(--or-fs-md);
+  color: var(--or-text-body);
+  text-align: center;
+  background: var(--or-surface-subtle);
+  border-top: 1px solid var(--or-border);
+}
+
+.footerAction {
+  padding: 0;
+  font: inherit;
+  font-weight: var(--or-fw-semibold);
+  color: var(--or-text);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  background: none;
+  border: 0;
+  cursor: pointer;
+
+  &:hover {
+    color: var(--or-brand);
+  }
+}

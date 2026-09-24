@@ -1,0 +1,41 @@
+.wrap {
+  display: flex;
+  flex-direction: column;
+  gap: var(--or-space-3);
+  min-width: 0;
+}
+
+/*
+ * 网格：两层渐变叠出竖线与横线。
+ *   - 竖线每 1/6 宽一条 —— 7 个日期之间有 6 段，所以内部 5 条 + 左右边框 2 条正好对上；
+ *   - 横线每 1/4 高一条。
+ * 用 background-size 铺而不是 repeating-linear-gradient，是因为前者的百分比语义更直白、
+ * 各浏览器实现也一致。
+ */
+.plot {
+  height: 240px;
+  border: 1px dashed var(--or-border-strong);
+  border-radius: var(--or-radius);
+  background-image:
+    linear-gradient(to right, var(--or-border) 1px, transparent 1px),
+    linear-gradient(to bottom, var(--or-border) 1px, transparent 1px);
+  background-size:
+    calc(100% / 6) 100%,
+    100% 25%;
+}
+
+.axis {
+  display: flex;
+  justify-content: space-between;
+  margin: 0;
+  padding: 0;
+  font-size: var(--or-fs-sm);
+  color: var(--or-text-muted);
+  list-style: none;
+}
+
+.tick {
+  /* 第一个与最后一个标签不参与 space-between 的居中视觉修正，
+     直接两端对齐即可 —— 参考图就是这样 */
+  white-space: nowrap;
+}

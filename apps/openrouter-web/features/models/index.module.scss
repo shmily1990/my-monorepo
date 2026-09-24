@@ -1,0 +1,79 @@
+.page {
+  display: grid;
+  grid-template-columns: var(--or-sidebar-width) minmax(0, 1fr);
+  gap: var(--or-space-7);
+  max-width: var(--or-content-max);
+  margin-inline: auto;
+  padding: var(--or-space-7) var(--or-space-6) var(--or-space-9);
+}
+
+.main {
+  display: flex;
+  flex-direction: column;
+  gap: var(--or-space-5);
+  /* min-width: 0 是必需的：否则表格视图的 min-width 会把整个网格列撑宽 */
+  min-width: 0;
+}
+
+.head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--or-space-4);
+}
+
+.title {
+  margin: 0;
+  font-size: var(--or-fs-2xl);
+  font-weight: var(--or-fw-bold);
+  letter-spacing: var(--or-tracking-tight);
+  color: var(--or-text);
+}
+
+.headActions {
+  display: flex;
+  align-items: center;
+  gap: var(--or-space-3);
+}
+
+.results {
+  display: flex;
+  flex-direction: column;
+  gap: var(--or-space-4);
+}
+
+/* 筛选结果为空时列表与表格共用这一个空态（因此由父级渲染一次） */
+.empty {
+  margin: 0;
+  padding: var(--or-space-10) var(--or-space-5);
+  font-size: var(--or-fs-md);
+  color: var(--or-text-muted);
+  text-align: center;
+  background: var(--or-surface-subtle);
+  border: 1px dashed var(--or-border-strong);
+  border-radius: var(--or-radius-lg);
+}
+
+/* 侧栏在窄屏改为常规文档流：不再吸顶，也不再独立滚动 */
+@media (max-width: 900px) {
+  .page {
+    grid-template-columns: minmax(0, 1fr);
+    gap: var(--or-space-6);
+  }
+}
+
+@media (max-width: 640px) {
+  .page {
+    padding: var(--or-space-5) var(--or-space-4) var(--or-space-8);
+  }
+
+  .head {
+    flex-direction: column;
+    align-items: stretch;
+    gap: var(--or-space-4);
+  }
+
+  .headActions {
+    flex-wrap: wrap;
+  }
+}

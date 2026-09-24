@@ -1,0 +1,103 @@
+.hero {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: var(--or-space-10) var(--or-space-6) var(--or-space-9);
+  text-align: center;
+}
+
+/*
+ * 参考图里标题是超大字号的紧字距粗体，这是整个首屏的气质来源。
+ * 用 clamp 而不是固定字号：视口窄下来时它要跟着缩，否则两行标题会在平板宽度溢出。
+ * line-height 1.03 是刻意的 —— 比常规的 1.1 还紧，还原参考图那种两行贴在一起的效果。
+ */
+.title {
+  margin: 0;
+  font-size: clamp(2.5rem, 6vw, 5.5rem);
+  font-weight: var(--or-fw-bold);
+  line-height: 1.03;
+  letter-spacing: var(--or-tracking-tight);
+  color: var(--or-text);
+}
+
+.subtitle {
+  margin: var(--or-space-6) 0 0;
+  font-size: var(--or-fs-xl);
+  color: var(--or-text-body);
+}
+
+.underline {
+  text-decoration: underline;
+  text-underline-offset: 3px;
+
+  &:hover {
+    color: var(--or-brand);
+  }
+}
+
+.actions {
+  display: flex;
+  align-items: center;
+  gap: var(--or-space-4);
+  margin-top: var(--or-space-7);
+}
+
+/* 这一组里 .primary 现在是 <button>、.secondary 仍是 <Link>，
+   所以 border/cursor 要一起给上（对 a 无害，对 button 必需） */
+.primary,
+.secondary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--or-space-2);
+  height: 52px;
+  padding-inline: var(--or-space-7);
+  font-size: var(--or-fs-lg);
+  font-weight: var(--or-fw-medium);
+  white-space: nowrap;
+  border: 0;
+  border-radius: var(--or-radius-lg);
+  cursor: pointer;
+}
+
+.primary {
+  color: #fff;
+  background: var(--or-brand);
+
+  &:hover {
+    background: var(--or-brand-hover);
+  }
+}
+
+.secondary {
+  color: var(--or-text);
+  background: var(--or-surface);
+  border: 1px solid var(--or-border-strong);
+
+  &:hover {
+    border-color: var(--or-text-subtle);
+  }
+}
+
+@media (max-width: 640px) {
+  .hero {
+    padding: var(--or-space-9) var(--or-space-4) var(--or-space-8);
+  }
+
+  .subtitle {
+    font-size: var(--or-fs-lg);
+  }
+
+  /* 两个按钮并排在这个宽度上会挤成一团 */
+  .actions {
+    flex-direction: column;
+    align-self: stretch;
+    gap: var(--or-space-3);
+  }
+
+  .primary,
+  .secondary {
+    width: 100%;
+    height: 48px;
+  }
+}

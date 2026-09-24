@@ -1,0 +1,56 @@
+.toolbar {
+  display: flex;
+  align-items: center;
+  gap: var(--or-space-3);
+  flex-wrap: wrap;
+}
+
+/*
+ * 尺寸全部交给 antd 的 `size="large"`（40px 高、圆角取自 token.borderRadius=8px，
+ * 与 --or-radius 同值），这里只负责布局。
+ * 这是有意为之：能用组件自带 props 表达的，就不要写成覆盖内部类名的 CSS ——
+ * 后者要跟 antd 的内部结构绑定，升级时最容易碎。
+ */
+
+/* 搜索框占据剩余宽度，但不会把右侧那组控件挤没 */
+.search {
+  flex: 1 1 260px;
+  min-width: 0;
+}
+
+.select {
+  flex: none;
+}
+
+.pinned {
+  flex: none;
+}
+
+/* 选中态用品牌色描边 + 浅底，与 List|Table 的选中态呼应 */
+.pinnedActive {
+  color: var(--or-brand);
+  border-color: var(--or-brand);
+  background: var(--or-brand-soft);
+}
+
+.view {
+  flex: none;
+  padding: 3px;
+  border-radius: var(--or-radius);
+}
+
+.viewLabel {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--or-space-2);
+}
+
+@media (max-width: 640px) {
+  .select {
+    flex: 1 1 auto;
+  }
+
+  .search {
+    flex-basis: 100%;
+  }
+}

@@ -1,0 +1,52 @@
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: var(--or-space-5);
+}
+
+/* 姓名两栏并排，对应参考图的 First name / Last name */
+.nameRow {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--or-space-4);
+}
+
+.termsRow {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--or-space-3);
+}
+
+.termsLabel {
+  font-size: var(--or-fs-md);
+  line-height: 1.55;
+  color: var(--or-text-body);
+  cursor: pointer;
+}
+
+.termsLink {
+  color: var(--or-brand);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+
+  &:hover {
+    color: var(--or-brand-hover);
+  }
+}
+
+/* 服务端返回的失败原因（凭据不对、未勾条款…） */
+.error {
+  margin: 0;
+  padding: var(--or-space-3) var(--or-space-4);
+  font-size: var(--or-fs-base);
+  color: var(--or-danger);
+  background: var(--or-danger-soft);
+  border-radius: var(--or-radius-sm);
+}
+
+@media (max-width: 520px) {
+  /* 窄屏下姓名两栏会挤到看不清，改成上下排 */
+  .nameRow {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}

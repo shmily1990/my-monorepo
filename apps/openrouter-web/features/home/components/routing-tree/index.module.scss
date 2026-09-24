@@ -1,0 +1,74 @@
+.tree {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+}
+
+.chip {
+  display: inline-flex;
+  align-items: center;
+  max-width: 100%;
+  padding: var(--or-space-2) var(--or-space-3);
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  font-size: var(--or-fs-sm);
+  color: var(--or-text);
+  white-space: nowrap;
+  background: var(--or-surface);
+  border: 1px solid var(--or-border);
+  border-radius: var(--or-radius);
+}
+
+/* 从胶囊垂直往下接到横线的「树干」 */
+.trunk {
+  width: 1px;
+  height: var(--or-space-7);
+  background: var(--or-border);
+}
+
+.branches {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  width: 100%;
+}
+
+.branch {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  padding-top: var(--or-space-7);
+
+  /*
+   * 分叉的「T」形由两段线拼成：
+   *   ::before 是这一格顶部的横线，首尾两格各只画一半，于是横线正好从
+   *            第一个瓦片的中心延伸到最后一个瓦片的中心；
+   *   ::after  是从那条横线垂下来的竖线。
+   * 相邻格子的半截横线首尾相接，看起来就是一条完整的横线。
+   */
+  &::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    right: 0;
+    left: 0;
+    height: 1px;
+    background: var(--or-border);
+  }
+
+  &:first-child::before {
+    left: 50%;
+  }
+
+  &:last-child::before {
+    right: 50%;
+  }
+
+  &::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    width: 1px;
+    height: var(--or-space-7);
+    background: var(--or-border);
+  }
+}

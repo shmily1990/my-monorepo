@@ -1,0 +1,57 @@
+.page {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  padding: var(--or-space-7) var(--or-space-8) var(--or-space-9);
+}
+
+.head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: var(--or-space-5);
+}
+
+.headText {
+  min-width: 0;
+}
+
+.title {
+  margin: 0;
+  font-size: var(--or-fs-2xl);
+  font-weight: var(--or-fw-bold);
+  letter-spacing: var(--or-tracking-tight);
+  color: var(--or-text);
+}
+
+.subtitle {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--or-space-2);
+  margin: var(--or-space-3) 0 0;
+  font-size: var(--or-fs-lg);
+  color: var(--or-text-muted);
+}
+
+.infoIcon {
+  color: var(--or-text-subtle);
+}
+
+@media (max-width: 900px) {
+  .page {
+    padding: var(--or-space-6) var(--or-space-5) var(--or-space-8);
+  }
+}
+
+@media (max-width: 640px) {
+  .page {
+    padding: var(--or-space-5) var(--or-space-4) var(--or-space-7);
+  }
+
+  /* 窄屏把主按钮落到标题下面，否则它会把标题挤成两行 */
+  .head {
+    flex-direction: column;
+    align-items: stretch;
+    gap: var(--or-space-4);
+  }
+}

@@ -1,0 +1,24 @@
+.wrap {
+  display: flex;
+  flex-direction: column;
+  gap: var(--or-space-5);
+  min-width: 0;
+}
+
+.column {
+  min-width: 0;
+}
+
+.title {
+  margin: 0;
+  font-size: var(--or-fs-lg);
+  font-weight: var(--or-fw-semibold);
+  letter-spacing: var(--or-tracking-snug);
+  color: var(--or-text);
+}
+
+.empty {
+  margin: var(--or-space-3) 0 0;
+  font-size: var(--or-fs-base);
+  color: var(--or-text-muted);
+}

@@ -1,0 +1,35 @@
+.wrapper {
+  flex: 1 1 auto;
+  min-width: 0;
+  max-width: 460px;
+}
+
+/*
+ * 覆盖的是 antd Input 的 affix wrapper（带 prefix/suffix 时 className 就落在那一层）。
+ * 高度与圆角交给 size="large" 与主题 token，这里只管底色与边框。
+ */
+.input {
+  padding-inline: var(--or-space-3);
+  background: var(--or-surface-sunken);
+  border-color: transparent;
+  color: var(--or-text);
+
+  &:hover,
+  &:focus-within {
+    border-color: var(--or-border-strong);
+  }
+}
+
+/* 「⌘ K」按键提示。参考图里是一个浅灰胶囊，贴在输入框右端。 */
+.kbd {
+  display: inline-flex;
+  align-items: center;
+  padding: 2px var(--or-space-2);
+  font-size: var(--or-fs-xs);
+  font-weight: var(--or-fw-medium);
+  line-height: 1.4;
+  color: var(--or-text-muted);
+  background: var(--or-surface);
+  border: 1px solid var(--or-border);
+  border-radius: var(--or-radius-sm);
+}

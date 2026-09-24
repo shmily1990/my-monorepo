@@ -1,0 +1,12 @@
+.mark {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex: none;
+
+  /* 中性灰、统一形状 —— 不做品牌区分，见组件里的注释 */
+  color: var(--or-text-subtle);
+  background: var(--or-surface-sunken);
+  border: 1px solid var(--or-border);
+  border-radius: var(--or-radius-sm);
+}

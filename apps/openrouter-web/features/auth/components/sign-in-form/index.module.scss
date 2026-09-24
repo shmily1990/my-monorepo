@@ -1,0 +1,23 @@
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: var(--or-space-5);
+}
+
+/* 服务端返回的失败原因（凭据不对、格式不合法…） */
+.error {
+  margin: 0;
+  padding: var(--or-space-3) var(--or-space-4);
+  font-size: var(--or-fs-base);
+  color: var(--or-danger);
+  background: var(--or-danger-soft);
+  border-radius: var(--or-radius-sm);
+}
+
+/* 测试账号提示：这是 mock 的门面，必须显眼到一眼能看见，否则没人知道该用什么登录 */
+.hint {
+  margin: 0;
+  font-size: var(--or-fs-sm);
+  color: var(--or-text-muted);
+  text-align: center;
+}

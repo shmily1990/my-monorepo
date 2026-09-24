@@ -1,0 +1,11 @@
+.signUp {
+  flex: none;
+}
+
+@media (max-width: 640px) {
+  .signUp {
+    /* 40px 的 large 在窄屏偏大，但这里是 antd 的尺寸档位，
+       强行改高度会连带影响内边距与行高 —— 保持不动，只收字距 */
+    padding-inline: var(--or-space-4);
+  }
+}

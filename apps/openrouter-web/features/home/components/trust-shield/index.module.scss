@@ -1,0 +1,37 @@
+.wrap {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--or-space-5);
+  padding: var(--or-space-5) 0;
+}
+
+.shield {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.outline {
+  color: var(--or-border-strong);
+}
+
+/* 盾牌里的人形：绝对居中，压在轮廓之上 */
+.people {
+  position: absolute;
+  color: var(--or-text-subtle);
+}
+
+/* 绿色对勾落在盾牌右上角 */
+.check {
+  position: absolute;
+  top: -6px;
+  right: 14px;
+  color: var(--or-success);
+  border-radius: var(--or-radius-pill);
+}
+
+.lock {
+  color: var(--or-text-subtle);
+}
