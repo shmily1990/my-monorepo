@@ -64,17 +64,18 @@ Turbo 的 `build` 任务因此只对 `apps/openrouter-web` 执行——这不是
 
 ## 为什么 tsconfig 分三档
 
-`@repo/typescript-config` 的三份配置是继承链，不是并列选项：
+`@repo/typescript-config` 的四份配置是继承链，不是并列选项：
 
 ```
 base.json                 NodeNext · strict · noUncheckedIndexedAccess
-├── nextjs.json           + ESNext/Bundler · jsx preserve · noEmit · next 插件
-└── react-library.json    + jsx react-jsx
+└── bundler.json          + ESNext/Bundler · noEmit
+    ├── nextjs.json       + jsx preserve · allowJs · next 插件
+    └── react-library.json + jsx react-jsx
 ```
 
-`base.json` 用 `NodeNext`，这对「被 Node 解析的库」是正确的。但打包器消费的代码需要 `Bundler` 解析（允许无扩展名相对导入）。`nextjs.json` 存在的**主要原因**就是覆盖 `module` 与 `moduleResolution` 这两个字段。
+`base.json` 用 `NodeNext`，这对「被 Node 解析的库」是正确的。但打包器消费的代码需要 `Bundler` 解析（允许无扩展名相对导入），`bundler.json` 就是这一档。`nextjs.json` 与 `react-library.json` 都从它继承。
 
-这套分层有一个已知缺口：**没有一档是为「被打包器消费、但既不是 Next 也不是 React 的内部包」准备的**。`packages/x-typings` 落在这个缺口里，因此在它自己的 tsconfig 中局部覆盖了 `module`/`moduleResolution`。这与「所有 tsconfig 都住在 `typescript-config`」的约定有轻微抵触，[conventions.md](conventions.md) 第 7 节记录了它以及干净的解法。
+**为什么 `bundler.json` 是独立一档，而不是各个包各自覆盖。** 在它出现之前，`nextjs.json` 存在的主要原因就是替应用做这一处覆盖，而 `packages/x-typings` 只能在自己的 tsconfig 里复制一份 —— 那与「所有 tsconfig 都住在 `typescript-config`」的约定相抵触。真正的触发点是 `packages/x-editor`：一个 `react-library.json`（即 `NodeNext`）的包，第一次 import 了 `@repo/x-typings`（`"type": "module"`）。类型检查会把后者的**源码**拉进一个 `NodeNext` 程序，于是 `TS2835` 报在 x-typings 自己的 barrel 上 —— 一个本身毫无问题的文件。这不是巧合而是结构性的：任何被打包器编译、又依赖 `"type": "module"` 兄弟包的包都会撞上。所以修在共享的那一档，`x-typings` 的局部覆盖也随之删掉了。
 
 ## 边界今天被保护得如何
 

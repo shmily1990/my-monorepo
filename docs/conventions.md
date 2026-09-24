@@ -112,13 +112,15 @@ Every convention in this repo, collected in one place, each marked with how stro
 
 **`NodeNext` 与 `type` 字段的相互作用**
 
-- `base.json` 用 `module/moduleResolution: NodeNext`。在 **ESM** 包（`"type": "module"`，如 `packages/x-typings`）里，它要求每个相对导入带显式 `.js` 扩展名，否则报 `TS2835` —— 这正是 `x-typings` 在自己的 tsconfig 里覆盖为 `Bundler` 的原因。
+- `base.json` 用 `module/moduleResolution: NodeNext`。在 **ESM** 包（`"type": "module"`，如 `packages/x-typings`）里，它要求每个相对导入带显式 `.js` 扩展名，否则报 `TS2835`。
 - `packages/ui` **没有** `type` 字段，按 CommonJS 处理，`NodeNext` 允许无扩展名相对导入，因此不触发 `TS2835`。
 - 由此推论：**给 `packages/ui` 加 `"type": "module"` 会让该陷阱生效**。对齐各包 `type` 字段前必须知道这一点。
-- 干净的解法是在 `typescript-config` 里新增一档 `bundler.json`（`module: ESNext` + `moduleResolution: Bundler` + `noEmit`），让 `nextjs.json`、`react-library.json` 与 `x-typings` 共同继承。目前 `x-typings` 采用局部覆盖，**属于对「所有 tsconfig 都住在 `typescript-config`」这一约定的自承例外**。
+- 打包器消费的包一律继承 `bundler.json`（`ESNext` + `Bundler` + `noEmit`），这一档已经建好，`nextjs.json` / `react-library.json` / `x-typings` 都从它继承 —— 各包不再需要局部覆盖。
+- **跨包时这个陷阱会以「报在别人身上」的形式出现**：一个 `NodeNext` 包 import 一个 `"type": "module"` 的兄弟包时，类型检查会拉进后者的源码，于是 `TS2835` 报在后者那个本身毫无问题的文件上。`packages/x-editor` import `@repo/x-typings` 时就是这样撞出来的 —— 见到这类「报错文件自己没有错」的情况，先查两个包的 `moduleResolution` 档位是否一致。
 
 **其它**
 
+- **`EditorDataLoader` 是对 4.1（共享类型一律是 Zod schema）的一处有意例外。** 它定义在 `packages/x-typings/src/editor.ts`，是个**带方法的 interface** —— Zod 只能描述数据、描述不了方法。4.1 的用意是防止「schema 与手写类型两份、迟早漂移」，而方法接口没有对应的运行时形态，不存在会漂移的第二份。同一文件里的**数据**契约（`EditorDataset`、`EditorPoint` 等）仍然是 Zod schema + `z.infer`，规则只在这里让路。
 - `packages/ui/tsconfig.json` 与 `apps/openrouter-web/tsconfig.json` 各自写了 `"strictNullChecks": true`，而 `base.json` 的 `strict: true` 已隐含它 —— 冗余，无害。`apps/openrouter-web/tsconfig.json` 还重复了 `nextjs.json` 已提供的 `plugins: [{ "name": "next" }]`。
 - `packages/ui/package.json` 的 `exports` 用 `"./*": "./src/*.tsx"`，但所有消费方实际都走 barrel（`"."`），glob 目前无人使用。
 - 根 `README.md` 是 create-turbo 模板的原文，除包清单外未针对本仓库改写。

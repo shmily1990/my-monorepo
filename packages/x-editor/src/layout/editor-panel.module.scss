@@ -1,0 +1,38 @@
+.panel {
+  display: flex;
+  flex-direction: column;
+  /* 撑满 Panel 给的空间，内部自己管溢出 */
+  height: 100%;
+  min-height: 0;
+  background: #101014;
+}
+
+.head {
+  display: flex;
+  flex: none;
+  align-items: center;
+  height: 30px;
+  padding-inline: 10px;
+  font-size: 12px;
+  color: #9a9aa5;
+  background: #16161a;
+  border-bottom: 1px solid #2a2a31;
+}
+
+/*
+ * 内容区。
+ *
+ * `min-height: 0` 是必需的：flex 子项默认 min-height 为 auto，内部有 canvas 之类
+ * 尺寸不受控的东西时，面板会被撑高、从而把整个编辑器撑出滚动条。
+ * 加 `position: relative` 是为了让内部（尤其是 canvas 宿主）能相对它做绝对定位铺满。
+ */
+.body {
+  position: relative;
+  flex: 1;
+  min-height: 0;
+  overflow: hidden;
+}
+
+.placeholder {
+  margin-top: 32px;
+}

@@ -14,11 +14,23 @@ Implemented against the design references in [`docs/`](../../docs):
 | --------------------------- | ------------- | -------------------------------------------------------------- |
 | `/`                         | `(marketing)` | [`features/home`](features/home)                               |
 | `/models`                   | `(marketing)` | [`features/models`](features/models)                           |
+| `/editor`                   | `(marketing)` | [`features/editor`](features/editor)                           |
 | `/workspaces`               | `(dashboard)` | [`features/workspaces`](features/workspaces)                   |
 | `/workspaces/api-keys`      | `(dashboard)` | [`features/api-keys`](features/api-keys)                       |
 | `/workspaces/api-keys/[id]` | `(dashboard)` | [`features/api-keys/detail.tsx`](features/api-keys/detail.tsx) |
 
 Every route file is a placeholder in the literal sense: each returns a single feature component.
+
+**`/editor` renders almost nothing on the server, and that is deliberate.** It wraps
+`@repo/x-editor` in `next/dynamic({ ssr: false })` because the editor contains a WebGL canvas:
+`"use client"` alone marks a client boundary but does not stop server pre-rendering, and the WebGL
+code would throw `document is not defined` during the pass. The `dynamic` call lives here rather than
+in the package so that the 3D library stays framework-agnostic. See
+[`packages/x-editor/README.md`](../../packages/x-editor/README.md).
+
+`/editor` sits in `(marketing)` and is therefore **public** (no session check) and renders the
+marketing header. If it should be behind login, moving the directory into `(dashboard)` is the
+whole change.
 
 `features/api-keys/` is the one feature holding two pages (list + detail) — they share a type and a mock dataset, so splitting them would only create a cross-feature import. An unknown `[id]` calls `notFound()`, so a bad URL 404s instead of rendering an empty shell.
 

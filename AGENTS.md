@@ -12,15 +12,16 @@ A Turborepo monorepo. Node 24 ([.nvmrc](.nvmrc)), pnpm 11 through Corepack, Type
 
 ## Workspaces
 
-| Path                         | Package                   | Role                                                                                                   |
-| ---------------------------- | ------------------------- | ------------------------------------------------------------------------------------------------------ |
-| `apps/openrouter-web`        | `openrouter-web`          | The only application. Next.js App Router. **Home and `/models` are implemented.** Serves on **:3002**. |
-| `packages/ui`                | `@repo/ui`                | The UI layer. Wraps Ant Design so apps never depend on antd.                                           |
-| `packages/x-typings`         | `@repo/x-typings`         | Shared types. Zod schemas are the source of truth.                                                     |
-| `packages/eslint-config`     | `@repo/eslint-config`     | ESLint flat configs, three entry points.                                                               |
-| `packages/typescript-config` | `@repo/typescript-config` | Shared `tsconfig.json` bases, three of them.                                                           |
+| Path                         | Package                   | Role                                                                                                     |
+| ---------------------------- | ------------------------- | -------------------------------------------------------------------------------------------------------- |
+| `apps/openrouter-web`        | `openrouter-web`          | The only application. Next.js App Router. Marketing pages, workspace, API keys, `/editor`. On **:3002**. |
+| `packages/ui`                | `@repo/ui`                | The UI layer. Wraps Ant Design so apps never depend on antd.                                             |
+| `packages/x-editor`          | `@repo/x-editor`          | The 3D editor core (React + react-three-fiber + three + zustand).                                        |
+| `packages/x-typings`         | `@repo/x-typings`         | Shared types. Zod schemas are the source of truth.                                                       |
+| `packages/eslint-config`     | `@repo/eslint-config`     | ESLint flat configs, three entry points.                                                                 |
+| `packages/typescript-config` | `@repo/typescript-config` | Shared `tsconfig.json` bases, four of them.                                                              |
 
-**Dependency direction**: the app → `@repo/ui`, `@repo/x-typings`. The two config packages are `devDependencies` everywhere. **Nothing depends on an app.** A library must never import from `apps/*`.
+**Dependency direction**: the app → `@repo/ui`, `@repo/x-editor`, `@repo/x-typings`; `@repo/x-editor` → `@repo/ui` + `@repo/x-typings`. Those are the only sibling-to-sibling edges, and they are one-directional. The two config packages are `devDependencies` everywhere. **Nothing depends on an app.** A library must never import from `apps/*`.
 
 There is exactly one application, on port **3002**.
 
@@ -83,7 +84,18 @@ The only application. Two route groups: `(marketing)` serves the public pages (`
 - **Never import `@ant-design/nextjs-registry` here** — it is a Next.js concern and belongs in the app's `layout.tsx`.
 - **Theme lives only in `src/theme.ts`**, locale only in `src/provider.tsx`.
 - **Never add a build script or `dist/`.** Consumed as source. Note the `"./*"` export glob matches only `.tsx`, so `@repo/ui/theme` is not resolvable by path — import it from the barrel.
-- **This package has no `"type"` field, and that is load-bearing.** It inherits `NodeNext` from `react-library.json`; under ESM (`"type": "module"`) that would demand an explicit `.js` extension on every relative import. Do not add `"type": "module"` without first moving it to a `Bundler`-resolved tsconfig.
+- **This package has no `"type"` field.** It inherits `Bundler` resolution from `react-library.json`, which allows extensionless relative imports either way — so the field is no longer load-bearing for compilation the way it once was. Leave it as it is; aligning `type` fields across packages is a separate decision with runtime consequences, not a tidy-up.
+
+### `packages/x-editor`
+
+- **The 3D editor core.** React 19 + `@react-three/fiber` + `three` + `zustand`. Consumed as source like every other internal package.
+- **It must not depend on Next.** The `next/dynamic({ ssr: false })` that the Canvas needs lives in the _app_ (`features/editor/index.tsx`), for the same reason `AntdRegistry` lives in the app while `UiProvider` lives in `@repo/ui`. Putting it here would make a 3D library depend on a framework.
+- **`"use client"` is not enough on its own.** R3F ships no directive of its own, and a client boundary does not stop server pre-rendering — the WebGL code still runs once on the server. Both are required: the directive here, `ssr: false` in the app.
+- **Every module rendering R3F elements needs the directive**, and R3F elements are lowercase (`<points>`, `<ambientLight>`), so their three.js props must be listed in the `react/no-unknown-property` ignore list in `packages/eslint-config/react.js`. Add a name there when the rule reports it — the list fails loudly, never silently.
+- **`three` ships no types.** `@types/three` is required and must stay on the same minor as `three`.
+- **`@react-three/fiber@9` peers `react >=19 <19.4`.** A React bump past 19.3 breaks it; v10 alpha is narrower, not wider. Check that peer range before touching React.
+- **This package depends on two siblings** (`@repo/ui` and `@repo/x-typings`) — the first package in the repo to do so. It consumes both; it does not create an edge between them.
+- **Its styles are self-contained.** Do not read the app's `--or-*` tokens from here — a library that does that goes colourless under any other consumer. Prefer plain values or `var(--x-editor-*, <fallback>)`.
 
 ### `packages/x-typings`
 
@@ -92,7 +104,9 @@ The only application. Two route groups: `(marketing)` serves the public pages (`
 - **Use Zod 4 top-level validators** (`z.uuid()`, `z.email()`); the `z.string().uuid()` forms are deprecated.
 - **Consumers should use `import type` when they only need the type** — it is erased at compile time and keeps Zod out of the importing bundle.
 - **Never add a build script or `dist/`.**
-- This package **overrides `module`/`moduleResolution` to `ESNext`/`Bundler`** in its own tsconfig, because it declares `"type": "module"` and `base.json`'s `NodeNext` would otherwise demand `.js` extensions on relative imports (`TS2835`). It is a self-declared exception to "all tsconfig lives in `typescript-config`"; [docs/conventions.md](docs/conventions.md) records it and the clean fix (a shared `bundler.json` that this package could extend).
+- It declares `"type": "module"`, so it extends `@repo/typescript-config/bundler.json` — under `base.json`'s `NodeNext`, an ESM package must put an explicit `.js` extension on every relative import (`TS2835`).
+- **Its source can only be type-checked from a `Bundler`-resolved program.** A `NodeNext` package that imports it will report `TS2835` against _this_ package's files, which are themselves fine — that is why the `bundler.json` tier exists and why any bundler-compiled package extends it. See [docs/conventions.md](docs/conventions.md) §7.
+- **The one sanctioned exception to the Zod rule lives here**: `EditorDataLoader` is a method-bearing interface, which Zod cannot express. The data contracts in the same file are still schemas. See §7 of [docs/conventions.md](docs/conventions.md).
 
 ## Commands
 

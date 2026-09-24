@@ -186,15 +186,17 @@ skill 为什么不是必然自动？因为它是**模型决策，不是字符串
 
 ```
 apps/openrouter-web/      唯一的应用（Next.js，:3002）
-  app/(marketing)/        路由组：首页与 /models；路由文件只 return 一个 feature 组件
+  app/(marketing)/        路由组：首页、/models、/editor；路由文件只 return 一个 feature 组件
+  app/(dashboard)/        路由组：登录后的 /workspaces 及其子页
   features/<page>/        每页一个目录：index.tsx + index.module.scss + components/
   components/             跨页共用的壳：layout/、brand/、icons/
   styles/tokens.scss      设计令牌（:root 自定义属性），由 app/layout.tsx 引入一次
-  lib/                    非组件逻辑：provider 注册表、导航数据、格式化函数
+  lib/                    非组件逻辑：会话、provider 注册表、导航数据、格式化函数
 packages/ui/              UI 层，封装 antd —— 子应用从这里取组件
+packages/x-editor/        3D 编辑器核心（r3f + three + zustand）；消费方自己负责 ssr:false
 packages/x-typings/       共享类型，Zod schema 为唯一来源
 packages/eslint-config/   ESLint 配置，三个入口：base / react-library / next-js
-packages/typescript-config/  tsconfig 基座，三个：base / nextjs / react-library
+packages/typescript-config/  tsconfig 基座，四个：base / bundler / nextjs / react-library
 
 docs/architecture.md      为什么这样设计
 docs/conventions.md       逐条规范与强制状态

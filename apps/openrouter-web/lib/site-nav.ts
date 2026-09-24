@@ -25,6 +25,7 @@ export const HEADER_NAV: readonly NavItem[] = [
   { label: "Ori", href: "/ori" },
   { label: "Pricing", href: "/pricing" },
   { label: "Docs", href: "/docs" },
+  { label: "编辑器", href: "/editor" },
 ];
 
 /**

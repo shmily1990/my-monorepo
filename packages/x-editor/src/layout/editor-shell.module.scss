@@ -1,0 +1,55 @@
+/*
+ * 外壳自己撑满父容器的高度，但不设高度来源 ——
+ * 高度由调用方决定（应用侧给的是 `100dvh - header`，见
+ * apps/openrouter-web/features/editor/index.module.scss）。
+ * 库不该假设自己占满视口，否则嵌进别的布局就错了。
+ */
+.shell {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  height: 100%;
+  min-height: 0;
+  overflow: hidden;
+  color: #e6e6e9;
+  background: #101014;
+}
+
+/* Panel 的 className 会落到一个内层 div 上（库的文档明确说了，为的是避开 flex 布局干扰） */
+.body {
+  flex: 1;
+  min-height: 0;
+}
+
+.column {
+  height: 100%;
+  min-width: 0;
+  overflow: hidden;
+}
+
+/*
+ * 分隔条。宽度就是可拖拽的命中区域 —— 1px 太细，鼠标很难抓；
+ * 视觉上靠内部的 ::after 画一条细线，命中区仍然有 6px。
+ */
+.separator {
+  position: relative;
+  flex: none;
+  width: 3px;
+  background: #2a2a31;
+  cursor: col-resize;
+  transition: background 120ms ease;
+
+  &::after {
+    content: "";
+    position: absolute;
+    inset-block: 0;
+    inset-inline-start: 50%;
+    width: 1px;
+    background: #3a3a44;
+    transform: translateX(-50%);
+  }
+
+  &:hover {
+    background: #3a3a44;
+  }
+}

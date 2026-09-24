@@ -8,11 +8,12 @@ Each config is a plain JSON file consumed via `extends`. There is no build step,
 
 ## Available configs
 
-| Config               | Extends     | Use for                                                                       |
-| -------------------- | ----------- | ----------------------------------------------------------------------------- |
-| `base.json`          | —           | The strictness floor. Node libraries, and anything not run through a bundler. |
-| `nextjs.json`        | `base.json` | Next.js apps.                                                                 |
-| `react-library.json` | `base.json` | React component libraries consumed as source.                                 |
+| Config               | Extends        | Use for                                                                       |
+| -------------------- | -------------- | ----------------------------------------------------------------------------- |
+| `base.json`          | —              | The strictness floor. Node libraries, and anything not run through a bundler. |
+| `bundler.json`       | `base.json`    | Anything a bundler compiles. Adds `ESNext` + `Bundler` + `noEmit`.            |
+| `nextjs.json`        | `bundler.json` | Next.js apps.                                                                 |
+| `react-library.json` | `bundler.json` | React component libraries consumed as source.                                 |
 
 ## Who uses what
 
@@ -20,6 +21,18 @@ Each config is a plain JSON file consumed via `extends`. There is no build step,
 | --------------------- | -------------------------------------------- |
 | `apps/openrouter-web` | `@repo/typescript-config/nextjs.json`        |
 | `packages/ui`         | `@repo/typescript-config/react-library.json` |
+| `packages/x-editor`   | `@repo/typescript-config/react-library.json` |
+| `packages/x-typings`  | `@repo/typescript-config/bundler.json`       |
+
+**Why `bundler.json` exists as its own tier.** `base.json` sets `NodeNext`, which is right for
+Node-resolved libraries and wrong for anything a bundler compiles: under `NodeNext` a package that
+declares `"type": "module"` must write an explicit `.js` extension on every relative import
+(`TS2835`). Before this tier existed, `nextjs.json` existed mainly to make that one override, and
+`packages/x-typings` carried a private copy of it. The gap became visible when `packages/x-editor`
+(a `react-library.json` package, i.e. `NodeNext`) imported `@repo/x-typings` (a `"type": "module"`
+package): type-checking x-editor pulled x-typings' _source_ into a `NodeNext` program and failed
+with `TS2835` on x-typings' own barrel. Any React library that imports a `"type": "module"`
+sibling hits this, so the override belongs in a shared tier rather than in each package.
 
 ## Usage
 
@@ -51,7 +64,7 @@ Some options match TypeScript's defaults and are written out for visibility; oth
 
 - **`strict: true`** — full strict mode.
 - **`noUncheckedIndexedAccess: true`** — _stricter than `strict` alone_. `arr[0]` and `record[key]` are typed `T | undefined`, so they need narrowing before use. This catches real bugs but is the most common surprise in this config.
-- **`module` / `moduleResolution`: `NodeNext`** — correct for libraries resolved by Node. **A bundled app that extends `base.json` directly will fail to resolve extensionless imports**; it needs `ESNext` + `Bundler` instead. That override is the main reason `nextjs.json` exists.
+- **`module` / `moduleResolution`: `NodeNext`** — correct for libraries resolved by Node. **Anything compiled by a bundler should extend `bundler.json` instead**, which overrides both to `ESNext` + `Bundler`; a bundled package that extends `base.json` directly will fail to resolve extensionless imports, and if it declares `"type": "module"` it will additionally fail with `TS2835`.
 - **`isolatedModules: true`** — every file must be independently transpilable. Type-only re-exports need the `export type { ... }` form.
 - **`moduleDetection: force`** — every file is treated as a module even without an `import`/`export`.
 - **`incremental: false`** — written out explicitly although it already matches the TypeScript default. Keep it off: Turborepo owns caching, and stray `.tsbuildinfo` files can make type-check tasks report results computed from an earlier graph state.
@@ -61,11 +74,15 @@ Some options match TypeScript's defaults and are written out for visibility; oth
 
 ## Per-config overrides
 
-`nextjs.json` adds:
+`bundler.json` adds:
 
 - `module: ESNext`, `moduleResolution: Bundler` — overrides `base.json`, see above.
+- `noEmit: true` — the bundler emits, not `tsc`.
+
+`nextjs.json` adds:
+
 - `jsx: preserve` — Next.js runs the JSX transform.
-- `allowJs: true`, `noEmit: true` — Next.js emits, not `tsc`.
+- `allowJs: true` — Next.js may compile JS.
 - `plugins: [{ "name": "next" }]` — enables Next.js's editor tooling.
 
 `react-library.json` adds only `jsx: react-jsx`, since these packages are consumed as source and do not emit.

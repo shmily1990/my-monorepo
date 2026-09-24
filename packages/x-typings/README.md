@@ -50,16 +50,32 @@ When you only need the type, use `import type { Order }` — that form is erased
 
 `exports` points straight at `./src/index.ts`. There is no `dist/`, no `build` script, and no Turbo build task — the consumer's bundler compiles this source directly. This matches `packages/ui`, and it removes the failure mode where `dist` goes stale and type errors get reported against an old build.
 
-## Why this package overrides its own tsconfig
+## tsconfig
 
-It extends `@repo/typescript-config/base.json` but overrides `module` and `moduleResolution` to `ESNext` / `Bundler`. `base.json` uses `NodeNext`, which demands an explicit `.js` extension on every relative import — `export * from "./user.js"`. That is right for Node-side code and wrong here: these files are consumed by a bundler, which wants extensionless specifiers. Without the override `src/index.ts` fails to compile with `TS2835`.
+It extends `@repo/typescript-config/bundler.json` (`module: ESNext`, `moduleResolution: Bundler`,
+`noEmit`). It needs `Bundler` rather than `base.json`'s `NodeNext` because it declares
+`"type": "module"`: under `NodeNext` an ESM package must write an explicit `.js` extension on every
+relative import — `export * from "./user.js"` — and `src/index.ts` fails to compile with `TS2835`.
 
-The override also means this package sits slightly outside the "all tsconfig lives in `@repo/typescript-config`" convention stated at the top of this repo's config packages. **The fix would be a `bundler.json` in that package** doing exactly what this override does, so this package could extend it instead. Until one exists, the local override stays.
+This package used to carry that override privately in its own `tsconfig.json`, which put it slightly
+outside the "all tsconfig lives in `@repo/typescript-config`" convention. The `bundler.json` tier now
+exists, so the override has moved there and this package just extends it.
 
 > [!NOTE]
-> **`packages/ui` inherits the same `NodeNext` settings and does _not_ hit `TS2835`.** The deciding factor is the `type` field, not the presence of relative imports: this package declares `"type": "module"`, so its files are ESM and `NodeNext` demands explicit extensions. `packages/ui` has no `type` field, so Node treats it as CommonJS and `NodeNext` permits extensionless relative imports — verified, its `src/index.ts` uses `export { ... } from "./button"` and type-checks clean.
+> **The deciding factor is the `type` field, not the presence of relative imports.** A
+> `"type": "module"` package under `NodeNext` is ESM and needs explicit extensions; a package with no
+> `type` field is CommonJS and `NodeNext` permits extensionless relative imports.
 >
-> The practical consequence: adding `"type": "module"` to `packages/ui` would make the trap live there. Worth knowing before aligning that package's `type` field with the rest of the repo.
+> **A `"type": "module"` package's source cannot be type-checked from a `NodeNext` program.** This is
+> why the `Bundler` tier matters beyond this package: when `packages/x-editor` (a
+> `react-library.json` package) first imported `@repo/x-typings`, `tsc` pulled this package's _source_
+> into a `NodeNext` program and reported `TS2835` against this package's own `src/index.ts` — a file
+> with nothing wrong in it. Any bundler-compiled package that imports this one would have hit the
+> same wall.
+>
+> The practical consequence: `"type": "module"` is safe here only because this package resolves with
+> `Bundler`. A `"type": "module"` package that resolved with `NodeNext` would need an explicit `.js`
+> extension on every relative import.
 
 ## Zod version
 

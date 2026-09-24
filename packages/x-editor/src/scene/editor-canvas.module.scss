@@ -1,0 +1,43 @@
+/*
+ * 绝对定位铺满面板内容区，而不是 `width/height: 100%`。
+ *
+ * 原因：r3f 的 `<Canvas>` 内部会量测父元素的尺寸来初始化 WebGL 视口，
+ * 而父元素的百分比高度要依赖 flex 链路上一整串 `min-height: 0` 都正确才成立 ——
+ * 中间任何一环漏了，就能量到 0 高度、画布静默变成空白。
+ * 绝对定位直接相对 `EditorPanel` 的 `.body`（它有 `position: relative`）算尺寸，
+ * 不经过 flex 的百分比解析，稳得多。
+ */
+.host {
+  position: absolute;
+  inset: 0;
+}
+
+/*
+ * 帧率读数。drei 的 `<Stats>` 会把 stats.js 的 DOM 面板 append 进 .host，
+ * 这个类名是唯一能定制它的口子（通过 Stats 的 className prop）。
+ *
+ * **每一项都必须 !important。** stats.js 把容器样式写成**内联** cssText
+ * （`position:fixed;top:0;left:0;cursor:pointer;opacity:0.9;z-index:10000`），
+ * 而类名在层叠上赢不过内联样式。参考实现用 emotion 写一整套 !important 也是这个原因，
+ * 这里用 SCSS 做同样的事。
+ */
+.stats {
+  /*
+   * 内联的是 position:fixed —— 不改掉它，读数会相对**视口**定位，
+   * 跑到整个页面的左上角，而不是这个 3D 面板的左上角。
+   * .host 本身是 position:absolute/inset:0 的定位祖先，所以这里用 absolute 就落回面板内。
+   */
+  position: absolute !important;
+  top: 6px !important;
+  left: 6px !important;
+  z-index: 2 !important;
+  opacity: 0.85 !important;
+
+  /*
+   * stats.js 的容器是 80×48 的**可点击**块（点它循环切换 FPS/MS/MB 面板）。
+   * 不放开指针事件的话，面板左上角那一片的轨道拖拽会被它吃掉 ——
+   * 切换面板由 showPanel prop 决定，不需要靠点击，所以直接让出事件。
+   */
+  pointer-events: none !important;
+  cursor: default !important;
+}

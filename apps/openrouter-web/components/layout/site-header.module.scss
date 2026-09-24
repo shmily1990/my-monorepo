@@ -2,6 +2,18 @@
   position: sticky;
   top: 0;
   z-index: var(--or-z-header);
+  /*
+   * 高度写在这里，而不是只给 .inner。
+   *
+   * header 有一条 1px 的下边框。高度只给 .inner 的话，header 的**实际占位是 65px**，
+   * 而 --or-header-height 是 64px —— 于是所有 `calc(100vh - var(--or-header-height))`
+   * 的地方都会多出 1px：最典型的表现就是页面平白多出一条几乎看不见的滚动条，
+   * 以及 sticky 的侧栏被这条边框压住 1px。
+   *
+   * 写在 .header 上，再靠全局的 `* { box-sizing: border-box }` 把边框算进这 64px，
+   * token 才等于真实占位，下面那些 calc 也才成立。
+   */
+  height: var(--or-header-height);
   background: var(--or-surface);
   border-bottom: 1px solid var(--or-border);
 }
@@ -15,7 +27,8 @@
   display: flex;
   align-items: center;
   gap: var(--or-space-6);
-  height: var(--or-header-height);
+  /* 撑满 .header（后者已含边框），这样两者不会各算一套高度 */
+  height: 100%;
   padding-inline: var(--or-space-6);
 }
 

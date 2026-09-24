@@ -1,4 +1,3 @@
-import { MarketingFooter } from "@/components/layout/marketing-footer";
 import { SiteHeader } from "@/components/layout/site-header";
 
 /**
@@ -15,7 +14,7 @@ export default function MarketingLayout({
     <>
       <SiteHeader />
       {children}
-      <MarketingFooter />
+      {/* <MarketingFooter /> */}
     </>
   );
 }

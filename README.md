@@ -37,6 +37,7 @@ This Turborepo includes the following packages/apps:
 
 - `openrouter-web`: the [Next.js](https://nextjs.org/) app, on :3002
 - `@repo/ui`: the shared component library used by the app, wrapping Ant Design
+- `@repo/x-editor`: the 3D editor core (React + react-three-fiber + three + zustand)
 - `@repo/x-typings`: the shared type definitions used across the monorepo
 - `@repo/eslint-config`: `eslint` configurations (includes `@next/eslint-plugin-next` and `eslint-config-prettier`)
 - `@repo/typescript-config`: `tsconfig.json`s used throughout the monorepo

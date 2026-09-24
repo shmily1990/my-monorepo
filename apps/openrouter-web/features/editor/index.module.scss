@@ -1,0 +1,40 @@
+/*
+ * 编辑器外壳：占满 header 以下的整个视口，**页面本身不产生滚动条**。
+ *
+ * 高度用 `100dvh - var(--or-header-height)` 而不是 `100vh` 或 `h-screen`：
+ *   - `100dvh` 取的是**动态**视口高度，移动端浏览器地址栏收起/展开时它跟着变；
+ *     用 `100vh` 的话地址栏一出现就会矮一截或高出一截，正是滚动条的来源。
+ *     上面那行 `100vh` 是给不认 dvh 的旧浏览器的回退，顺序不能反。
+ *   - 减去的那个 token 现在等于 header 的**真实占位高度（含 1px 下边框）** ——
+ *     见 components/layout/site-header.module.scss 里的说明。少减或多减 1px
+ *     都会让页面平白多出一条滚动条，这正是把高度定义在 .header 而不是 .inner 上的原因。
+ *
+ * `overflow: hidden` 是刻意的：这一页的设计意图就是"不滚动"。
+ * 以后如果内部某个区域（画布、侧栏、日志）确实需要滚动，**在那一层**加
+ * `overflow: auto` 与 `min-height: 0` —— 让滚动发生在面板内部，
+ * 而不是把整个页面撑高又冒出页面级滚动条。
+ */
+.editor {
+  height: calc(100vh - var(--or-header-height));
+  height: calc(100dvh - var(--or-header-height));
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  overflow: hidden;
+}
+
+/*
+ * `next/dynamic` 在编辑器 chunk 到位之前的占位。
+ *
+ * 与编辑器同高同色：否则加载完成的一瞬间会从白变黑，闪一下。
+ */
+.loading {
+  display: flex;
+  flex: 1;
+  align-items: center;
+  justify-content: center;
+  margin: 0;
+  font-size: var(--or-fs-base);
+  color: var(--or-text-muted);
+  background: #101014;
+}

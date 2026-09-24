@@ -1,0 +1,49 @@
+/*
+ * 编辑器自己的深色 chrome。
+ *
+ * **刻意不引用应用的设计令牌**（`--or-*`）：那些变量定义在
+ * `apps/openrouter-web/styles/tokens.scss` 里，本包看不到也不该依赖 ——
+ * 依赖了的话，换个应用消费这个包就会因为拿不到变量而掉成无色。
+ * 所以这里写死自己的值。将来若真要统一主题，正确做法是让调用方传 CSS 变量进来
+ * （在 :root 上定义、本包 `var(--x-editor-bg, <兜底值>)` 读取），而不是直接引用别人的令牌。
+ */
+.header {
+  display: flex;
+  flex: none;
+  align-items: center;
+  gap: 12px;
+  height: 44px;
+  padding-inline: 12px;
+  color: #e6e6e9;
+  background: #16161a;
+  border-bottom: 1px solid #2a2a31;
+}
+
+.logo {
+  display: flex;
+  flex: none;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+}
+
+/* 没传 logo 时的占位：等宽等高，保证标题位置不跳 */
+.logoPlaceholder {
+  width: 28px;
+  height: 28px;
+  background: #26262e;
+  border: 1px dashed #3a3a44;
+  border-radius: 6px;
+}
+
+.title {
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.actions {
+  display: flex;
+  gap: 8px;
+  margin-left: auto;
+}
